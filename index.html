@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rocko's Modern Gym App</title>
     
-    <!-- PWA Meta Tags -->
     <meta name="description" content="Your complete strength training companion - track workouts, calculate plates, and monitor progress">
     <meta name="theme-color" content="#0a0e27">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,9 +12,8 @@
     <meta name="apple-mobile-web-app-title" content="Rocko's Gym">
     <link rel="manifest" href="manifest.json">
     
-    <!-- App Icons -->
-    <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>ðŸ’ª</text></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>ðŸ’ª</text></svg>">
+    <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>💪</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>💪</text></svg>">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -238,7 +236,6 @@
     </style>
 </head>
 <body class="bg-animated text-white min-h-screen">
-    <!-- Gradient overlay -->
     <div class="fixed inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5 pointer-events-none"></div>
     
     <div id="app" class="relative max-w-6xl mx-auto p-4 md:p-6"></div>
@@ -468,9 +465,9 @@
                 return { avg: weight.toFixed(1), percentages };
             }
             
-            // Epley formula: 1RM = weight Ã— (1 + reps/30)
+            // Epley formula: 1RM = weight * (1 + reps/30)
             const epley = weight * (1 + reps / 30);
-            // Brzycki formula: 1RM = weight Ã— (36/(37-reps))
+            // Brzycki formula: 1RM = weight * (36/(37-reps))
             const brzycki = weight * (36 / (37 - reps));
             // Average of both formulas
             const avg = (epley + brzycki) / 2;
@@ -578,7 +575,7 @@
             state.workouts = [...state.workouts, workout];
             localStorage.setItem('workouts', JSON.stringify(state.workouts));
             state.currentSets = [];
-            alert('ðŸŽ‰ Workout saved!');
+            alert('🎉 Workout saved!');
             render();
         }
 
@@ -613,7 +610,7 @@
             localStorage.setItem('prs', JSON.stringify(state.prs));
             
             if (share) {
-                const msg = `ðŸŽ‰ New PR! ${state.userName || 'I'} just hit ${state.prData.weight} ${state.unit} Ã— ${state.prData.reps} on ${state.prData.exercise}! ðŸ’ª`;
+                const msg = `🎉 New PR! ${state.userName || 'I'} just hit ${state.prData.weight} ${state.unit} × ${state.prData.reps} on ${state.prData.exercise}! 💪`;
                 window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(msg)}`, '_blank');
             }
             
@@ -624,8 +621,8 @@
 
         // Share Workout
         function shareWorkout(workout) {
-            const setsList = workout.sets.map(s => `${s.exercise}: ${s.weight} ${s.unit} Ã— ${s.reps}`).join('\\n');
-            const msg = `ðŸ’ª ${state.userName || 'I'} crushed a workout!\\n\\n${setsList}\\n\\nTotal Volume: ${workout.volume.toLocaleString()} ${state.unit}`;
+            const setsList = workout.sets.map(s => `${s.exercise}: ${s.weight} ${s.unit} × ${s.reps}`).join('\\n');
+            const msg = `💪 ${state.userName || 'I'} crushed a workout!\\n\\n${setsList}\\n\\nTotal Volume: ${workout.volume.toLocaleString()} ${state.unit}`;
             window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(msg)}`, '_blank');
         }
 
@@ -652,7 +649,7 @@
         // Share Streak
         function shareStreak() {
             const streak = getStreak();
-            const msg = `ðŸ”¥ ${state.userName || 'I'} have a ${streak} day workout streak! Keep grinding! ðŸ’ª`;
+            const msg = `🔥 ${state.userName || 'I'} have a ${streak} day workout streak! Keep grinding! 💪`;
             window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(msg)}`, '_blank');
         }
 
@@ -724,9 +721,9 @@
             let calendarHTML = `
                 <div class="glass-strong rounded-3xl p-6 hover-lift fade-in">
                     <div class="flex items-center justify-between mb-6">
-                        <button onclick="changeMonth(-1)" class="glass hover:glass-strong px-4 py-2 rounded-lg">â†</button>
+                        <button onclick="changeMonth(-1)" class="glass hover:glass-strong px-4 py-2 rounded-lg">←</button>
                         <h3 class="text-xl font-bold">${monthNames[state.calendarMonth]} ${state.calendarYear}</h3>
-                        <button onclick="changeMonth(1)" class="glass hover:glass-strong px-4 py-2 rounded-lg">â†’</button>
+                        <button onclick="changeMonth(1)" class="glass hover:glass-strong px-4 py-2 rounded-lg">→</button>
                     </div>
                     
                     <div class="grid grid-cols-7 gap-2 mb-2">
@@ -789,26 +786,26 @@
                     </div>
                     <p class="text-gray-400">Your complete strength training companion</p>
                     ${state.userName ? 
-                        `<button onclick="state.showNameDialog = true; render();" class="text-gray-400 hover:text-white text-sm mt-2">ðŸ‘¤ ${state.userName}</button>` :
-                        `<button onclick="state.showNameDialog = true; render();" class="glass hover:glass-strong px-4 py-2 rounded-lg text-sm mt-2">ðŸ‘¤ Set Your Name</button>`
+                        `<button onclick="state.showNameDialog = true; render();" class="text-gray-400 hover:text-white text-sm mt-2">👤 ${state.userName}</button>` :
+                        `<button onclick="state.showNameDialog = true; render();" class="glass hover:glass-strong px-4 py-2 rounded-lg text-sm mt-2">👤 Set Your Name</button>`
                     }
                 </div>
 
                 <div class="grid grid-cols-4 gap-2 mb-6 glass-strong p-2 rounded-xl">
                     <button onclick="state.view = 'calc'; render();" class="py-3 rounded-lg font-semibold flex flex-col items-center gap-1 transition ${state.view === 'calc' ? 'bg-blue-600' : 'text-gray-400 hover:glass'}">
-                        <span>ðŸ’ª</span>
+                        <span>💪</span>
                         <span class="text-xs">Calc</span>
                     </button>
                     <button onclick="state.view = 'log'; render();" class="py-3 rounded-lg font-semibold flex flex-col items-center gap-1 transition ${state.view === 'log' ? 'bg-blue-600' : 'text-gray-400 hover:glass'}">
-                        <span>ðŸ“</span>
+                        <span>📝</span>
                         <span class="text-xs">Log</span>
                     </button>
                     <button onclick="state.view = 'cal'; render();" class="py-3 rounded-lg font-semibold flex flex-col items-center gap-1 transition ${state.view === 'cal' ? 'bg-blue-600' : 'text-gray-400 hover:glass'}">
-                        <span>ðŸ“…</span>
+                        <span>📅</span>
                         <span class="text-xs">Calendar</span>
                     </button>
                     <button onclick="state.view = 'prog'; render();" class="py-3 rounded-lg font-semibold flex flex-col items-center gap-1 transition ${state.view === 'prog' ? 'bg-blue-600' : 'text-gray-400 hover:glass'}">
-                        <span>ðŸ“Š</span>
+                        <span>📈</span>
                         <span class="text-xs">Progress</span>
                     </button>
                 </div>
@@ -816,15 +813,14 @@
                 ${streak > 0 ? `
                     <div class="bg-gradient-to-r from-orange-600 to-red-600 rounded-xl p-4 mb-6 flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <span class="text-2xl">ðŸ”¥</span>
+                            <span class="text-2xl">🔥</span>
                             <span class="text-2xl font-bold">${streak} Day Streak!</span>
                         </div>
-                        <button onclick="shareStreak()" class="text-3xl hover:scale-110 transition">ðŸ“˜</button>
+                        <button onclick="shareStreak()" class="text-3xl hover:scale-110 transition">📤</button>
                     </div>
                 ` : ''}
 
                 ${state.view === 'calc' ? `
-                    <!-- Strength Standards Section -->
                     <div class="glass-strong rounded-3xl p-6 hover-lift fade-in mb-6">
                         <h3 class="text-xl font-bold mb-4">Strength Standards</h3>
                         
@@ -871,13 +867,12 @@
                                         </div>
                                     ` : ''}
                                 ` : `
-                                    <div class="text-center text-green-400 font-semibold">ðŸ† Maximum Level Achieved!</div>
+                                    <div class="text-center text-green-400 font-semibold">🏆 Maximum Level Achieved!</div>
                                 `}
                             </div>
                         ` : ''}
                     </div>
 
-                    <!-- 1RM Calculator Section -->
                     <div class="glass-strong rounded-3xl p-6 hover-lift fade-in mb-6">
                         <h3 class="text-xl font-bold mb-4">1RM Calculator</h3>
                         
@@ -914,7 +909,6 @@
                         `}
                     </div>
 
-                    <!-- Plate Calculator Section -->
                     <div class="glass-strong rounded-2xl shadow-2xl p-6">
                         <h3 class="text-xl font-bold mb-4">Plate Calculator</h3>
                         
@@ -941,7 +935,7 @@
                                     ${plateResult.plates.map(p => `
                                         <div class="flex items-center justify-between glass-strong rounded-xl p-4 hover-scale transition-all">
                                             <span class="text-2xl font-bold text-blue-400">${p.weight} ${state.unit}</span>
-                                            <span class="text-xl text-gray-300">Ã— ${p.count}</span>
+                                            <span class="text-xl text-gray-300">× ${p.count}</span>
                                         </div>
                                     `).join('')}
                                 </div>
@@ -965,13 +959,13 @@
                                     <div class="flex items-center justify-between glass-strong rounded-lg p-3 mb-2">
                                         <div>
                                             <span class="font-semibold">${set.exercise}</span>
-                                            <span class="text-gray-400 ml-2">${set.weight} ${set.unit} Ã— ${set.reps}</span>
+                                            <span class="text-gray-400 ml-2">${set.weight} ${set.unit} × ${set.reps}</span>
                                         </div>
-                                        <button onclick="state.currentSets.splice(${idx}, 1); render();" class="text-red-400 hover:text-red-300 text-xl">Ã—</button>
+                                        <button onclick="state.currentSets.splice(${idx}, 1); render();" class="text-red-400 hover:text-red-300 text-xl">×</button>
                                     </div>
                                 `).join('')}
                                 <button onclick="finishWorkout()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 hover-scale transition-all ripple glow-green py-3 rounded-lg font-semibold mt-3 transition">
-                                    âœ… Finish Workout
+                                    ✅ Finish Workout
                                 </button>
                             </div>
                         ` : ''}
@@ -989,7 +983,7 @@
                         </div>
                         
                         <button onclick="addSet()" class="w-full btn-primary hover-scale transition-all ripple py-3 rounded-lg font-semibold transition">
-                            âž• Add Set(s)
+                            ➕ Add Set(s)
                         </button>
                     </div>
 
@@ -1005,17 +999,17 @@
                                 <div class="flex justify-between items-start mb-3">
                                     <div>
                                         <div class="font-semibold text-lg">${new Date(w.date).toLocaleDateString()}</div>
-                                        <div class="text-sm text-gray-400">${w.sets.length} sets â€¢ ${w.volume.toLocaleString()} ${state.unit} total volume</div>
+                                        <div class="text-sm text-gray-400">${w.sets.length} sets • ${w.volume.toLocaleString()} ${state.unit} total volume</div>
                                     </div>
                                     <div class="flex gap-2">
-                                        <button onclick='shareWorkout(${JSON.stringify(w).replace(/'/g, "\\'")}); event.stopPropagation();' class="text-blue-400 text-2xl hover:scale-110 transition">ðŸ“˜</button>
-                                        <button onclick="deleteWorkout(${w.id})" class="text-red-400 text-xl hover:scale-110 transition">ðŸ—‘ï¸</button>
+                                        <button onclick='shareWorkout(${JSON.stringify(w).replace(/'/g, "\\'")}); event.stopPropagation();' class="text-blue-400 text-2xl hover:scale-110 transition">📤</button>
+                                        <button onclick="deleteWorkout(${w.id})" class="text-red-400 text-xl hover:scale-110 transition">🗑️</button>
                                     </div>
                                 </div>
                                 <div class="space-y-2">
                                     ${w.sets.map(s => `
                                         <div class="flex justify-between items-center glass-strong rounded px-3 py-2">
-                                            <span class="text-sm text-gray-300">${s.exercise}: ${s.weight} ${s.unit} Ã— ${s.reps}</span>
+                                            <span class="text-sm text-gray-300">${s.exercise}: ${s.weight} ${s.unit} × ${s.reps}</span>
                                             <button onclick='checkPR("${s.exercise}", ${s.weight}, ${s.reps}); event.stopPropagation();' class="text-xs bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 hover-scale transition-all ripple glow-green px-3 py-1 rounded font-semibold transition">
                                                 PR?
                                             </button>
@@ -1070,7 +1064,7 @@
                                                 <div>
                                                     <div class="flex justify-between text-xs text-gray-400 mb-1">
                                                         <span>${entry.date.toLocaleDateString()}</span>
-                                                        <span class="font-semibold">${entry.weight} ${state.unit} Ã— ${entry.reps}</span>
+                                                        <span class="font-semibold">${entry.weight} ${state.unit} × ${entry.reps}</span>
                                                     </div>
                                                     <div class="w-full glass rounded-full h-2">
                                                         <div class="h-2 rounded-full bg-gradient-to-r from-blue-600 to-green-500 transition-all duration-500" 
@@ -1109,17 +1103,17 @@
                 ${state.showPRDialog && state.prData ? `
                     <div class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50">
                         <div class="glass-strong rounded-3xl p-6 hover-lift fade-in max-w-md w-full">
-                            <h3 class="text-2xl font-bold mb-4 text-center">ðŸŽ‰ New PR!</h3>
+                            <h3 class="text-2xl font-bold mb-4 text-center">🎉 New PR!</h3>
                             <div class="text-center mb-4">
                                 <div class="text-lg font-bold text-green-400 mb-2">${state.prData.exercise}</div>
                                 <div class="text-4xl font-bold text-blue-400 mb-1">${state.prData.weight} ${state.unit}</div>
-                                <div class="text-gray-400">Ã— ${state.prData.reps} reps</div>
+                                <div class="text-gray-400">× ${state.prData.reps} reps</div>
                             </div>
                             <p class="text-gray-400 text-sm text-center mb-6">Would you like to share this PR?</p>
                             <div class="flex gap-3">
                                 <button onclick="savePR(false)" class="flex-1 glass hover:glass-strong py-3 rounded-lg font-semibold transition">Just Save</button>
                                 <button onclick="savePR(true)" class="flex-1 btn-primary hover-scale transition-all ripple py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition">
-                                    ðŸ“˜ Share
+                                    📤 Share
                                 </button>
                             </div>
                         </div>
@@ -1150,7 +1144,7 @@
                 <div class="install-prompt bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-4 rounded-2xl shadow-2xl max-w-md mx-4">
                     <div class="flex items-center justify-between gap-4">
                         <div class="flex items-center gap-3">
-                            <span class="text-3xl">ðŸ’ª</span>
+                            <span class="text-3xl">💪</span>
                             <div>
                                 <div class="font-bold">Install Rocko's Gym</div>
                                 <div class="text-sm opacity-90">Add to your home screen</div>
@@ -1213,7 +1207,7 @@
         // Show iOS install instructions if on iOS and not installed
         if (isIOS() && !isInStandaloneMode() && !localStorage.getItem('iosPromptShown')) {
             setTimeout(() => {
-                if (confirm('ðŸ’ª Install Rocko\'s Gym App!\n\nTap the Share button (â¬†ï¸) and then "Add to Home Screen" to install.')) {
+                if (confirm('💪 Install Rocko\'s Gym App!\n\nTap the Share button (⬆️) and then "Add to Home Screen" to install.')) {
                     localStorage.setItem('iosPromptShown', 'true');
                 }
             }, 3000);
