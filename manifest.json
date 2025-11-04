@@ -1,33 +1,107 @@
-{
-  "name": "Rocko's Modern Gym App",
-  "short_name": "Rocko's Gym",
-  "description": "Your complete strength training companion - track workouts, calculate plates, and monitor progress",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#1e293b",
-  "orientation": "portrait",
-  "icons": [
-    {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231e293b'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white'>ðŸ’ª</text></svg>",
-      "sizes": "192x192",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231e293b'/><text x='50' y='70' font-size='60' text-anchor='middle' fill='white'>ðŸ’ª</text></svg>",
-      "sizes": "512x512",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
-  ],
-  "categories": ["health", "fitness", "lifestyle"],
-  "screenshots": [
-    {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 390 844'><rect width='390' height='844' fill='%230f172a'/><text x='195' y='100' font-size='32' text-anchor='middle' fill='white' font-weight='bold'>Rocko's Modern Gym</text><text x='195' y='400' font-size='80' text-anchor='middle'>ðŸ’ª</text></svg>",
-      "sizes": "390x844",
-      "type": "image/svg+xml",
-      "form_factor": "narrow"
-    }
-  ]
+const CACHE_NAME = 'rockos-gym-v1';
+const urlsToCache = [
+  './index.html',
+  './manifest.json',
+  'https://cdn.tailwindcss.com'
+];
+
+// Install Service Worker
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) => {
+        console.log('Opened cache');
+        return cache.addAll(urlsToCache);
+      })
+  );
+  self.skipWaiting();
+});
+
+// Activate Service Worker
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_NAME) {
+            console.log('Deleting old cache:', cacheName);
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+  self.clients.claim();
+});
+
+// Fetch Event - Cache First Strategy
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request)
+      .then((response) => {
+        // Cache hit - return response
+        if (response) {
+          return response;
+        }
+
+        return fetch(event.request).then(
+          (response) => {
+            // Check if valid response
+            if (!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
+            }
+
+            // Clone the response
+            const responseToCache = response.clone();
+
+            caches.open(CACHE_NAME)
+              .then((cache) => {
+                cache.put(event.request, responseToCache);
+              });
+
+            return response;
+          }
+        );
+      })
+      .catch(() => {
+        // If both cache and network fail, show offline page
+        return caches.match('./index.html');
+      })
+  );
+});
+
+// Background Sync (for future features)
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'sync-workouts') {
+    event.waitUntil(syncWorkouts());
+  }
+});
+
+async function syncWorkouts() {
+  // Placeholder for syncing workout data
+  console.log('Syncing workouts...');
 }
+
+// Push Notifications (for future features)
+self.addEventListener('push', (event) => {
+  const options = {
+    body: event.data ? event.data.text() : 'New workout reminder!',
+    icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="0.9em" font-size="90">ðŸ’ª</text></svg>',
+    badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="0.9em" font-size="90">ðŸ’ª</text></svg>',
+    vibrate: [200, 100, 200],
+    tag: 'workout-reminder',
+    requireInteraction: false
+  };
+
+  event.waitUntil(
+    self.registration.showNotification('Rocko\'s Gym', options)
+  );
+});
+
+// Notification Click
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(
+    clients.openWindow('/')
+  );
+});
