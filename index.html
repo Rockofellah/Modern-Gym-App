@@ -7,43 +7,241 @@
     
     <!-- PWA Meta Tags -->
     <meta name="description" content="Your complete strength training companion - track workouts, calculate plates, and monitor progress">
-    <meta name="theme-color" content="#1e293b">
+    <meta name="theme-color" content="#0a0e27">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Rocko's Gym">
     <link rel="manifest" href="manifest.json">
     
     <!-- App Icons -->
-    <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>💪</text></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>💪</text></svg>">
+    <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>ðŸ’ª</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>ðŸ’ª</text></svg>">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
+        
+        body {
+            background: #0a0e27;
+            overflow-x: hidden;
+        }
+        
+        .bg-animated {
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 25%, #0a0e27 50%, #2d1b4e 75%, #0a0e27 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.5);
+        }
+        
+        .glow-blue {
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.5), 0 0 60px rgba(59, 130, 246, 0.3);
+        }
+        
+        .glow-purple {
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.5), 0 0 60px rgba(168, 85, 247, 0.3);
+        }
+        
+        .glow-green {
+            box-shadow: 0 0 30px rgba(34, 197, 94, 0.5), 0 0 60px rgba(34, 197, 94, 0.3);
+        }
+        
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        }
+        
+        .hover-scale:hover {
+            transform: scale(1.02);
+        }
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
         .calendar-day {
             aspect-ratio: 1;
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
+        
+        .calendar-day::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(168, 85, 247, 0.2));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .calendar-day:hover::before {
+            opacity: 1;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6, #a855f7, #ec4899);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite;
+        }
+        
+        @keyframes progressSlide {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 0%; }
+        }
+        
+        .progress-animated {
+            background: linear-gradient(90deg, #3b82f6, #a855f7, #ec4899, #3b82f6);
+            background-size: 200% 100%;
+            animation: progressSlide 2s linear infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
+        }
+        
+        .stat-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
         .install-prompt {
             position: fixed;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 1000;
-            animation: slideUp 0.3s ease-out;
+            animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
+        
         @keyframes slideUp {
             from { transform: translateX(-50%) translateY(100px); opacity: 0; }
             to { transform: translateX(-50%) translateY(0); opacity: 1; }
         }
+        
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ripple::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .ripple:active::after {
+            width: 300px;
+            height: 300px;
+        }
     </style>
 </head>
-<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white min-h-screen">
-    <div id="app" class="max-w-2xl mx-auto p-4"></div>
+<body class="bg-animated text-white min-h-screen">
+    <!-- Gradient overlay -->
+    <div class="fixed inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5 pointer-events-none"></div>
+    
+    <div id="app" class="relative max-w-6xl mx-auto p-4 md:p-6"></div>
 
     <script>
         // State Management
@@ -270,9 +468,9 @@
                 return { avg: weight.toFixed(1), percentages };
             }
             
-            // Epley formula: 1RM = weight × (1 + reps/30)
+            // Epley formula: 1RM = weight Ã— (1 + reps/30)
             const epley = weight * (1 + reps / 30);
-            // Brzycki formula: 1RM = weight × (36/(37-reps))
+            // Brzycki formula: 1RM = weight Ã— (36/(37-reps))
             const brzycki = weight * (36 / (37 - reps));
             // Average of both formulas
             const avg = (epley + brzycki) / 2;
@@ -380,7 +578,7 @@
             state.workouts = [...state.workouts, workout];
             localStorage.setItem('workouts', JSON.stringify(state.workouts));
             state.currentSets = [];
-            alert('🎉 Workout saved!');
+            alert('ðŸŽ‰ Workout saved!');
             render();
         }
 
@@ -415,7 +613,7 @@
             localStorage.setItem('prs', JSON.stringify(state.prs));
             
             if (share) {
-                const msg = `🎉 New PR! ${state.userName || 'I'} just hit ${state.prData.weight} ${state.unit} × ${state.prData.reps} on ${state.prData.exercise}! 💪`;
+                const msg = `ðŸŽ‰ New PR! ${state.userName || 'I'} just hit ${state.prData.weight} ${state.unit} Ã— ${state.prData.reps} on ${state.prData.exercise}! ðŸ’ª`;
                 window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(msg)}`, '_blank');
             }
             
@@ -426,8 +624,8 @@
 
         // Share Workout
         function shareWorkout(workout) {
-            const setsList = workout.sets.map(s => `${s.exercise}: ${s.weight} ${s.unit} × ${s.reps}`).join('\\n');
-            const msg = `💪 ${state.userName || 'I'} crushed a workout!\\n\\n${setsList}\\n\\nTotal Volume: ${workout.volume.toLocaleString()} ${state.unit}`;
+            const setsList = workout.sets.map(s => `${s.exercise}: ${s.weight} ${s.unit} Ã— ${s.reps}`).join('\\n');
+            const msg = `ðŸ’ª ${state.userName || 'I'} crushed a workout!\\n\\n${setsList}\\n\\nTotal Volume: ${workout.volume.toLocaleString()} ${state.unit}`;
             window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(msg)}`, '_blank');
         }
 
@@ -454,7 +652,7 @@
         // Share Streak
         function shareStreak() {
             const streak = getStreak();
-            const msg = `🔥 ${state.userName || 'I'} have a ${streak} day workout streak! Keep grinding! 💪`;
+            const msg = `ðŸ”¥ ${state.userName || 'I'} have a ${streak} day workout streak! Keep grinding! ðŸ’ª`;
             window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(msg)}`, '_blank');
         }
 
@@ -524,16 +722,16 @@
             const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             
             let calendarHTML = `
-                <div class="bg-slate-800 rounded-2xl p-6">
+                <div class="glass-strong rounded-3xl p-6 hover-lift fade-in">
                     <div class="flex items-center justify-between mb-6">
-                        <button onclick="changeMonth(-1)" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg">←</button>
+                        <button onclick="changeMonth(-1)" class="glass hover:glass-strong px-4 py-2 rounded-lg">â†</button>
                         <h3 class="text-xl font-bold">${monthNames[state.calendarMonth]} ${state.calendarYear}</h3>
-                        <button onclick="changeMonth(1)" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg">→</button>
+                        <button onclick="changeMonth(1)" class="glass hover:glass-strong px-4 py-2 rounded-lg">â†’</button>
                     </div>
                     
                     <div class="grid grid-cols-7 gap-2 mb-2">
                         ${['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => 
-                            `<div class="text-center text-sm text-slate-400 font-semibold">${day}</div>`
+                            `<div class="text-center text-sm text-gray-400 font-semibold">${day}</div>`
                         ).join('')}
                     </div>
                     
@@ -550,7 +748,7 @@
                             const isToday = dateString === new Date().toDateString();
                             
                             return `
-                                <div class="calendar-day rounded-lg ${hasWorkout ? 'bg-green-600' : 'bg-slate-700'} ${isToday ? 'ring-2 ring-blue-400' : ''} hover:bg-slate-600 transition">
+                                <div class="calendar-day rounded-lg ${hasWorkout ? 'bg-green-600' : 'glass'} ${isToday ? 'ring-2 ring-blue-400' : ''} hover:glass-strong transition">
                                     <span class="text-sm ${hasWorkout ? 'font-bold' : ''}">${day}</span>
                                 </div>
                             `;
@@ -560,11 +758,11 @@
                     <div class="mt-6 flex items-center justify-center gap-4 text-sm">
                         <div class="flex items-center gap-2">
                             <div class="w-4 h-4 rounded bg-green-600"></div>
-                            <span class="text-slate-400">Workout Day</span>
+                            <span class="text-gray-400">Workout Day</span>
                         </div>
                         <div class="flex items-center gap-2">
-                            <div class="w-4 h-4 rounded bg-slate-700"></div>
-                            <span class="text-slate-400">Rest Day</span>
+                            <div class="w-4 h-4 rounded glass"></div>
+                            <span class="text-gray-400">Rest Day</span>
                         </div>
                     </div>
                 </div>
@@ -589,28 +787,28 @@
                         </svg>
                         <h1 class="text-4xl font-bold">Rocko's Modern Gym App</h1>
                     </div>
-                    <p class="text-slate-400">Your complete strength training companion</p>
+                    <p class="text-gray-400">Your complete strength training companion</p>
                     ${state.userName ? 
-                        `<button onclick="state.showNameDialog = true; render();" class="text-slate-400 hover:text-white text-sm mt-2">👤 ${state.userName}</button>` :
-                        `<button onclick="state.showNameDialog = true; render();" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg text-sm mt-2">👤 Set Your Name</button>`
+                        `<button onclick="state.showNameDialog = true; render();" class="text-gray-400 hover:text-white text-sm mt-2">ðŸ‘¤ ${state.userName}</button>` :
+                        `<button onclick="state.showNameDialog = true; render();" class="glass hover:glass-strong px-4 py-2 rounded-lg text-sm mt-2">ðŸ‘¤ Set Your Name</button>`
                     }
                 </div>
 
-                <div class="grid grid-cols-4 gap-2 mb-6 bg-slate-800 p-2 rounded-xl">
-                    <button onclick="state.view = 'calc'; render();" class="py-3 rounded-lg font-semibold flex flex-col items-center gap-1 transition ${state.view === 'calc' ? 'bg-blue-600' : 'text-slate-400 hover:bg-slate-700'}">
-                        <span>💪</span>
+                <div class="grid grid-cols-4 gap-2 mb-6 glass-strong p-2 rounded-xl">
+                    <button onclick="state.view = 'calc'; render();" class="py-3 rounded-lg font-semibold flex flex-col items-center gap-1 transition ${state.view === 'calc' ? 'bg-blue-600' : 'text-gray-400 hover:glass'}">
+                        <span>ðŸ’ª</span>
                         <span class="text-xs">Calc</span>
                     </button>
-                    <button onclick="state.view = 'log'; render();" class="py-3 rounded-lg font-semibold flex flex-col items-center gap-1 transition ${state.view === 'log' ? 'bg-blue-600' : 'text-slate-400 hover:bg-slate-700'}">
-                        <span>📝</span>
+                    <button onclick="state.view = 'log'; render();" class="py-3 rounded-lg font-semibold flex flex-col items-center gap-1 transition ${state.view === 'log' ? 'bg-blue-600' : 'text-gray-400 hover:glass'}">
+                        <span>ðŸ“</span>
                         <span class="text-xs">Log</span>
                     </button>
-                    <button onclick="state.view = 'cal'; render();" class="py-3 rounded-lg font-semibold flex flex-col items-center gap-1 transition ${state.view === 'cal' ? 'bg-blue-600' : 'text-slate-400 hover:bg-slate-700'}">
-                        <span>📅</span>
+                    <button onclick="state.view = 'cal'; render();" class="py-3 rounded-lg font-semibold flex flex-col items-center gap-1 transition ${state.view === 'cal' ? 'bg-blue-600' : 'text-gray-400 hover:glass'}">
+                        <span>ðŸ“…</span>
                         <span class="text-xs">Calendar</span>
                     </button>
-                    <button onclick="state.view = 'prog'; render();" class="py-3 rounded-lg font-semibold flex flex-col items-center gap-1 transition ${state.view === 'prog' ? 'bg-blue-600' : 'text-slate-400 hover:bg-slate-700'}">
-                        <span>📊</span>
+                    <button onclick="state.view = 'prog'; render();" class="py-3 rounded-lg font-semibold flex flex-col items-center gap-1 transition ${state.view === 'prog' ? 'bg-blue-600' : 'text-gray-400 hover:glass'}">
+                        <span>ðŸ“Š</span>
                         <span class="text-xs">Progress</span>
                     </button>
                 </div>
@@ -618,138 +816,138 @@
                 ${streak > 0 ? `
                     <div class="bg-gradient-to-r from-orange-600 to-red-600 rounded-xl p-4 mb-6 flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <span class="text-2xl">🔥</span>
+                            <span class="text-2xl">ðŸ”¥</span>
                             <span class="text-2xl font-bold">${streak} Day Streak!</span>
                         </div>
-                        <button onclick="shareStreak()" class="text-3xl hover:scale-110 transition">📘</button>
+                        <button onclick="shareStreak()" class="text-3xl hover:scale-110 transition">ðŸ“˜</button>
                     </div>
                 ` : ''}
 
                 ${state.view === 'calc' ? `
                     <!-- Strength Standards Section -->
-                    <div class="bg-slate-800 rounded-2xl p-6 mb-6">
+                    <div class="glass-strong rounded-3xl p-6 hover-lift fade-in mb-6">
                         <h3 class="text-xl font-bold mb-4">Strength Standards</h3>
                         
                         <div class="grid grid-cols-2 gap-4 mb-4">
-                            <select onchange="state.exercise = this.value; render();" class="bg-slate-700 text-white rounded-lg px-4 py-3">
+                            <select onchange="state.exercise = this.value; render();" class="glass text-white rounded-lg px-4 py-3">
                                 ${['squat', 'bench', 'deadlift', 'ohp', 'row'].map(ex => 
                                     `<option value="${ex}" ${state.exercise === ex ? 'selected' : ''}>${exercises[ex]}</option>`
                                 ).join('')}
                             </select>
-                            <select onchange="state.gender = this.value; render();" class="bg-slate-700 text-white rounded-lg px-4 py-3">
+                            <select onchange="state.gender = this.value; render();" class="glass text-white rounded-lg px-4 py-3">
                                 <option value="male" ${state.gender === 'male' ? 'selected' : ''}>Male</option>
                                 <option value="female" ${state.gender === 'female' ? 'selected' : ''}>Female</option>
                             </select>
                         </div>
                         
-                        <select onchange="state.category = this.value; render();" class="w-full bg-slate-700 text-white rounded-lg px-4 py-3 mb-4">
+                        <select onchange="state.category = this.value; render();" class="w-full glass text-white rounded-lg px-4 py-3 mb-4">
                             <option value="natural" ${state.category === 'natural' ? 'selected' : ''}>Natural Lifter</option>
                             <option value="enhanced" ${state.category === 'enhanced' ? 'selected' : ''}>Enhanced Lifter</option>
                         </select>
                         
-                        <input type="number" value="${state.bodyweight}" oninput="state.bodyweight = this.value;" onchange="render();" placeholder="Your bodyweight (${state.unit})" class="w-full bg-slate-700 text-white rounded-lg px-4 py-3 mb-4">
+                        <input type="number" value="${state.bodyweight}" oninput="state.bodyweight = this.value;" onchange="render();" placeholder="Your bodyweight (${state.unit})" class="w-full glass text-white rounded-lg px-4 py-3 mb-4">
                         
                         ${strengthResult ? `
-                            <div class="bg-slate-900 rounded-xl p-6">
+                            <div class="glass rounded-xl p-6">
                                 <div class="text-center mb-4">
                                     <div class="text-3xl font-bold ${levelColors[strengthResult.level]} capitalize mb-2">${strengthResult.level}</div>
-                                    <div class="text-slate-400 text-sm">${strengthResult.ratio}x Bodyweight</div>
+                                    <div class="text-gray-400 text-sm">${strengthResult.ratio}x Bodyweight</div>
                                 </div>
                                 
                                 ${strengthResult.level !== 'elite' ? `
                                     <div class="mb-4">
-                                        <div class="flex justify-between text-xs text-slate-400 mb-2">
+                                        <div class="flex justify-between text-xs text-gray-400 mb-2">
                                             <span>Progress to ${strengthResult.nextLevel}</span>
                                             <span>${strengthResult.progress}%</span>
                                         </div>
-                                        <div class="w-full bg-slate-700 rounded-full h-3">
+                                        <div class="w-full glass rounded-full h-3">
                                             <div class="h-3 rounded-full ${levelBgColors[strengthResult.level]} transition-all duration-500" style="width: ${strengthResult.progress}%"></div>
                                         </div>
                                     </div>
                                     ${strengthResult.nextWeight ? `
                                         <div class="text-center text-sm">
-                                            <span class="text-slate-400">Next milestone:</span>
+                                            <span class="text-gray-400">Next milestone:</span>
                                             <span class="text-white font-bold text-lg ml-2">${strengthResult.nextWeight} ${state.unit}</span>
                                         </div>
                                     ` : ''}
                                 ` : `
-                                    <div class="text-center text-green-400 font-semibold">🏆 Maximum Level Achieved!</div>
+                                    <div class="text-center text-green-400 font-semibold">ðŸ† Maximum Level Achieved!</div>
                                 `}
                             </div>
                         ` : ''}
                     </div>
 
                     <!-- 1RM Calculator Section -->
-                    <div class="bg-slate-800 rounded-2xl p-6 mb-6">
+                    <div class="glass-strong rounded-3xl p-6 hover-lift fade-in mb-6">
                         <h3 class="text-xl font-bold mb-4">1RM Calculator</h3>
                         
                         <div class="grid grid-cols-2 gap-4 mb-4">
-                            <input type="number" value="${state.repWeight}" oninput="state.repWeight = this.value;" onchange="render();" placeholder="Weight" class="bg-slate-700 text-white rounded-lg px-4 py-3">
-                            <input type="number" value="${state.reps}" oninput="state.reps = this.value;" onchange="render();" placeholder="Reps (1-12)" class="bg-slate-700 text-white rounded-lg px-4 py-3">
+                            <input type="number" value="${state.repWeight}" oninput="state.repWeight = this.value;" onchange="render();" placeholder="Weight" class="glass text-white rounded-lg px-4 py-3">
+                            <input type="number" value="${state.reps}" oninput="state.reps = this.value;" onchange="render();" placeholder="Reps (1-12)" class="glass text-white rounded-lg px-4 py-3">
                         </div>
                         
                         ${oneRMResult ? `
-                            <div class="bg-slate-900 rounded-xl p-6">
+                            <div class="glass rounded-xl p-6">
                                 <div class="text-center mb-6">
-                                    <div class="text-sm text-slate-400 mb-2">Estimated 1 Rep Max</div>
+                                    <div class="text-sm text-gray-400 mb-2">Estimated 1 Rep Max</div>
                                     <div class="text-5xl font-bold text-green-400">${oneRMResult.avg}</div>
-                                    <div class="text-sm text-slate-400 mt-1">${state.unit}</div>
+                                    <div class="text-sm text-gray-400 mt-1">${state.unit}</div>
                                 </div>
                                 
                                 <div class="grid grid-cols-2 gap-3">
                                     ${[95, 90, 85, 80, 75, 70, 65, 60].map(pct => `
-                                        <div class="bg-slate-800 rounded-lg px-4 py-3 flex justify-between items-center">
-                                            <span class="text-slate-400 font-semibold">${pct}%</span>
+                                        <div class="glass-strong rounded-lg px-4 py-3 flex justify-between items-center">
+                                            <span class="text-gray-400 font-semibold">${pct}%</span>
                                             <span class="text-white font-bold">${oneRMResult.percentages[pct]}</span>
                                         </div>
                                     `).join('')}
                                 </div>
                                 
-                                <button onclick="state.weight = '${oneRMResult.avg}'; render();" class="w-full mt-4 bg-green-600 hover:bg-green-500 py-3 rounded-lg font-semibold transition">
+                                <button onclick="state.weight = '${oneRMResult.avg}'; render();" class="w-full mt-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 hover-scale transition-all ripple glow-green py-3 rounded-lg font-semibold transition">
                                     Use ${oneRMResult.avg} ${state.unit} as Target Weight
                                 </button>
                             </div>
                         ` : `
-                            <div class="text-center text-slate-400 py-6">
+                            <div class="text-center text-gray-400 py-6">
                                 Enter weight and reps (1-12) to calculate your 1RM
                             </div>
                         `}
                     </div>
 
                     <!-- Plate Calculator Section -->
-                    <div class="bg-slate-800 rounded-2xl shadow-2xl p-6">
+                    <div class="glass-strong rounded-2xl shadow-2xl p-6">
                         <h3 class="text-xl font-bold mb-4">Plate Calculator</h3>
                         
                         <div class="flex gap-2 mb-6">
-                            <button onclick="state.unit = 'lbs'; render();" class="flex-1 py-3 rounded-lg font-semibold transition ${state.unit === 'lbs' ? 'bg-blue-600' : 'bg-slate-700 hover:bg-slate-600'}">LBS</button>
-                            <button onclick="state.unit = 'kg'; render();" class="flex-1 py-3 rounded-lg font-semibold transition ${state.unit === 'kg' ? 'bg-blue-600' : 'bg-slate-700 hover:bg-slate-600'}">KG</button>
+                            <button onclick="state.unit = 'lbs'; render();" class="flex-1 py-3 rounded-lg font-semibold transition ${state.unit === 'lbs' ? 'bg-blue-600' : 'glass hover:glass-strong'}">LBS</button>
+                            <button onclick="state.unit = 'kg'; render();" class="flex-1 py-3 rounded-lg font-semibold transition ${state.unit === 'kg' ? 'bg-blue-600' : 'glass hover:glass-strong'}">KG</button>
                         </div>
                         
-                        <select onchange="state.bar = this.value; render();" class="w-full bg-slate-700 text-white rounded-lg px-4 py-3 mb-6">
+                        <select onchange="state.bar = this.value; render();" class="w-full glass text-white rounded-lg px-4 py-3 mb-6">
                             ${Object.entries(barNames).map(([key, name]) => 
                                 `<option value="${key}" ${state.bar === key ? 'selected' : ''}>${name}</option>`
                             ).join('')}
                         </select>
                         
-                        <input type="number" value="${state.weight}" oninput="state.weight = this.value;" onchange="render();" placeholder="Enter target weight (${state.unit})" class="w-full bg-slate-700 text-white text-2xl rounded-lg px-4 py-3 mb-6">
+                        <input type="number" value="${state.weight}" oninput="state.weight = this.value;" onchange="render();" placeholder="Enter target weight (${state.unit})" class="w-full glass text-white text-2xl rounded-lg px-4 py-3 mb-6">
                         
                         ${plateResult && plateResult.plates ? `
-                            <div class="bg-slate-900 rounded-xl p-6">
+                            <div class="glass rounded-xl p-6">
                                 ${plateResult.error ? `
                                     <p class="text-yellow-400 text-sm mb-4 text-center font-semibold">${plateResult.error}</p>
                                 ` : ''}
                                 <h4 class="text-xl font-bold mb-4 text-center">Load per side:</h4>
                                 <div class="space-y-3">
                                     ${plateResult.plates.map(p => `
-                                        <div class="flex items-center justify-between bg-slate-800 rounded-lg p-4">
+                                        <div class="flex items-center justify-between glass-strong rounded-xl p-4 hover-scale transition-all">
                                             <span class="text-2xl font-bold text-blue-400">${p.weight} ${state.unit}</span>
-                                            <span class="text-xl text-slate-300">× ${p.count}</span>
+                                            <span class="text-xl text-gray-300">Ã— ${p.count}</span>
                                         </div>
                                     `).join('')}
                                 </div>
                             </div>
                         ` : plateResult && plateResult.error ? `
-                            <div class="bg-slate-900 rounded-xl p-6 text-center">
+                            <div class="glass rounded-xl p-6 text-center">
                                 <p class="text-yellow-400">${plateResult.error}</p>
                             </div>
                         ` : ''}
@@ -757,68 +955,68 @@
                 ` : ''}
 
                 ${state.view === 'log' ? `
-                    <div class="bg-slate-800 rounded-2xl p-6 mb-6">
+                    <div class="glass-strong rounded-3xl p-6 hover-lift fade-in mb-6">
                         <h3 class="text-xl font-bold mb-4">Log Workout</h3>
                         
                         ${state.currentSets.length > 0 ? `
-                            <div class="mb-6 bg-slate-900 rounded-xl p-4">
+                            <div class="mb-6 glass rounded-xl p-4">
                                 <h4 class="font-semibold mb-3 text-green-400">Current Workout</h4>
                                 ${state.currentSets.map((set, idx) => `
-                                    <div class="flex items-center justify-between bg-slate-800 rounded-lg p-3 mb-2">
+                                    <div class="flex items-center justify-between glass-strong rounded-lg p-3 mb-2">
                                         <div>
                                             <span class="font-semibold">${set.exercise}</span>
-                                            <span class="text-slate-400 ml-2">${set.weight} ${set.unit} × ${set.reps}</span>
+                                            <span class="text-gray-400 ml-2">${set.weight} ${set.unit} Ã— ${set.reps}</span>
                                         </div>
-                                        <button onclick="state.currentSets.splice(${idx}, 1); render();" class="text-red-400 hover:text-red-300 text-xl">×</button>
+                                        <button onclick="state.currentSets.splice(${idx}, 1); render();" class="text-red-400 hover:text-red-300 text-xl">Ã—</button>
                                     </div>
                                 `).join('')}
-                                <button onclick="finishWorkout()" class="w-full bg-green-600 hover:bg-green-500 py-3 rounded-lg font-semibold mt-3 transition">
-                                    ✅ Finish Workout
+                                <button onclick="finishWorkout()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 hover-scale transition-all ripple glow-green py-3 rounded-lg font-semibold mt-3 transition">
+                                    âœ… Finish Workout
                                 </button>
                             </div>
                         ` : ''}
                         
-                        <select onchange="state.workoutExercise = this.value; render();" class="w-full bg-slate-700 text-white rounded-lg px-4 py-3 mb-4">
+                        <select onchange="state.workoutExercise = this.value; render();" class="w-full glass text-white rounded-lg px-4 py-3 mb-4">
                             ${Object.entries(exercises).map(([key, name]) => 
                                 `<option value="${key}" ${state.workoutExercise === key ? 'selected' : ''}>${name}</option>`
                             ).join('')}
                         </select>
                         
                         <div class="grid grid-cols-3 gap-4 mb-4">
-                            <input type="number" value="${state.workoutWeight}" oninput="state.workoutWeight = this.value" placeholder="Weight" class="bg-slate-700 text-white rounded-lg px-4 py-3">
-                            <input type="number" value="${state.workoutReps}" oninput="state.workoutReps = this.value" placeholder="Reps" class="bg-slate-700 text-white rounded-lg px-4 py-3">
-                            <input type="number" value="${state.workoutSets}" oninput="state.workoutSets = this.value" placeholder="Sets" class="bg-slate-700 text-white rounded-lg px-4 py-3">
+                            <input type="number" value="${state.workoutWeight}" oninput="state.workoutWeight = this.value" placeholder="Weight" class="glass text-white rounded-lg px-4 py-3">
+                            <input type="number" value="${state.workoutReps}" oninput="state.workoutReps = this.value" placeholder="Reps" class="glass text-white rounded-lg px-4 py-3">
+                            <input type="number" value="${state.workoutSets}" oninput="state.workoutSets = this.value" placeholder="Sets" class="glass text-white rounded-lg px-4 py-3">
                         </div>
                         
-                        <button onclick="addSet()" class="w-full bg-blue-600 hover:bg-blue-500 py-3 rounded-lg font-semibold transition">
-                            ➕ Add Set(s)
+                        <button onclick="addSet()" class="w-full btn-primary hover-scale transition-all ripple py-3 rounded-lg font-semibold transition">
+                            âž• Add Set(s)
                         </button>
                     </div>
 
-                    <div class="bg-slate-800 rounded-2xl p-6">
+                    <div class="glass-strong rounded-3xl p-6 hover-lift fade-in">
                         <h3 class="text-xl font-bold mb-4">Recent Workouts</h3>
                         ${state.workouts.length === 0 ? `
                             <div class="text-center py-12">
-                                <p class="text-slate-400 text-lg mb-2">No workouts logged yet!</p>
-                                <p class="text-slate-500 text-sm">Start tracking your progress above</p>
+                                <p class="text-gray-400 text-lg mb-2">No workouts logged yet!</p>
+                                <p class="text-gray-500 text-sm">Start tracking your progress above</p>
                             </div>
                         ` : state.workouts.slice().reverse().slice(0, 10).map(w => `
-                            <div class="bg-slate-700 rounded-lg p-4 mb-4">
+                            <div class="glass rounded-xl p-4 hover-scale transition-all mb-4">
                                 <div class="flex justify-between items-start mb-3">
                                     <div>
                                         <div class="font-semibold text-lg">${new Date(w.date).toLocaleDateString()}</div>
-                                        <div class="text-sm text-slate-400">${w.sets.length} sets • ${w.volume.toLocaleString()} ${state.unit} total volume</div>
+                                        <div class="text-sm text-gray-400">${w.sets.length} sets â€¢ ${w.volume.toLocaleString()} ${state.unit} total volume</div>
                                     </div>
                                     <div class="flex gap-2">
-                                        <button onclick='shareWorkout(${JSON.stringify(w).replace(/'/g, "\\'")}); event.stopPropagation();' class="text-blue-400 text-2xl hover:scale-110 transition">📘</button>
-                                        <button onclick="deleteWorkout(${w.id})" class="text-red-400 text-xl hover:scale-110 transition">🗑️</button>
+                                        <button onclick='shareWorkout(${JSON.stringify(w).replace(/'/g, "\\'")}); event.stopPropagation();' class="text-blue-400 text-2xl hover:scale-110 transition">ðŸ“˜</button>
+                                        <button onclick="deleteWorkout(${w.id})" class="text-red-400 text-xl hover:scale-110 transition">ðŸ—‘ï¸</button>
                                     </div>
                                 </div>
                                 <div class="space-y-2">
                                     ${w.sets.map(s => `
-                                        <div class="flex justify-between items-center bg-slate-800 rounded px-3 py-2">
-                                            <span class="text-sm text-slate-300">${s.exercise}: ${s.weight} ${s.unit} × ${s.reps}</span>
-                                            <button onclick='checkPR("${s.exercise}", ${s.weight}, ${s.reps}); event.stopPropagation();' class="text-xs bg-green-600 hover:bg-green-500 px-3 py-1 rounded font-semibold transition">
+                                        <div class="flex justify-between items-center glass-strong rounded px-3 py-2">
+                                            <span class="text-sm text-gray-300">${s.exercise}: ${s.weight} ${s.unit} Ã— ${s.reps}</span>
+                                            <button onclick='checkPR("${s.exercise}", ${s.weight}, ${s.reps}); event.stopPropagation();' class="text-xs bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 hover-scale transition-all ripple glow-green px-3 py-1 rounded font-semibold transition">
                                                 PR?
                                             </button>
                                         </div>
@@ -842,39 +1040,39 @@
                             const cumulativeWeight = data.reduce((sum, d) => sum + (d.weight * d.reps), 0);
                             
                             return `
-                                <div class="bg-slate-800 rounded-2xl p-6">
+                                <div class="glass-strong rounded-3xl p-6 hover-lift fade-in">
                                     <h3 class="text-xl font-bold mb-4">${name}</h3>
                                     
                                     <div class="grid grid-cols-3 gap-4 mb-4">
-                                        <div class="bg-slate-900 rounded-lg p-4 text-center">
-                                            <div class="text-xs text-slate-400 mb-1">Current</div>
+                                        <div class="glass rounded-xl p-4 hover-scale transition-all text-center">
+                                            <div class="text-xs text-gray-400 mb-1">Current</div>
                                             <div class="text-2xl font-bold text-blue-400">${latestWeight}</div>
-                                            <div class="text-xs text-slate-500">${state.unit}</div>
+                                            <div class="text-xs text-gray-500">${state.unit}</div>
                                         </div>
-                                        <div class="bg-slate-900 rounded-lg p-4 text-center">
-                                            <div class="text-xs text-slate-400 mb-1">Max</div>
+                                        <div class="glass rounded-xl p-4 hover-scale transition-all text-center">
+                                            <div class="text-xs text-gray-400 mb-1">Max</div>
                                             <div class="text-2xl font-bold text-green-400">${maxWeight}</div>
-                                            <div class="text-xs text-slate-500">${state.unit}</div>
+                                            <div class="text-xs text-gray-500">${state.unit}</div>
                                         </div>
-                                        <div class="bg-slate-900 rounded-lg p-4 text-center">
-                                            <div class="text-xs text-slate-400 mb-1">Cumulative</div>
+                                        <div class="glass rounded-xl p-4 hover-scale transition-all text-center">
+                                            <div class="text-xs text-gray-400 mb-1">Cumulative</div>
                                             <div class="text-2xl font-bold text-purple-400">
                                                 ${cumulativeWeight.toLocaleString()}
                                             </div>
-                                            <div class="text-xs text-slate-500">${state.unit}</div>
+                                            <div class="text-xs text-gray-500">${state.unit}</div>
                                         </div>
                                     </div>
                                     
-                                    <div class="bg-slate-900 rounded-lg p-4">
-                                        <h4 class="text-sm font-semibold mb-3 text-slate-400">Recent Sessions</h4>
+                                    <div class="glass rounded-xl p-4 hover-scale transition-all">
+                                        <h4 class="text-sm font-semibold mb-3 text-gray-400">Recent Sessions</h4>
                                         <div class="space-y-3">
                                             ${data.slice(-6).map(entry => `
                                                 <div>
-                                                    <div class="flex justify-between text-xs text-slate-400 mb-1">
+                                                    <div class="flex justify-between text-xs text-gray-400 mb-1">
                                                         <span>${entry.date.toLocaleDateString()}</span>
-                                                        <span class="font-semibold">${entry.weight} ${state.unit} × ${entry.reps}</span>
+                                                        <span class="font-semibold">${entry.weight} ${state.unit} Ã— ${entry.reps}</span>
                                                     </div>
-                                                    <div class="w-full bg-slate-700 rounded-full h-2">
+                                                    <div class="w-full glass rounded-full h-2">
                                                         <div class="h-2 rounded-full bg-gradient-to-r from-blue-600 to-green-500 transition-all duration-500" 
                                                              style="width: ${(entry.weight / maxWeight) * 100}%"></div>
                                                     </div>
@@ -887,9 +1085,9 @@
                         }).join('')}
                         
                         ${state.workouts.length === 0 ? `
-                            <div class="bg-slate-800 rounded-2xl p-6 text-center">
-                                <p class="text-slate-400 text-lg mb-2">No progress data yet!</p>
-                                <p class="text-slate-500 text-sm">Start logging workouts to track your gains</p>
+                            <div class="glass-strong rounded-3xl p-6 hover-lift fade-in text-center">
+                                <p class="text-gray-400 text-lg mb-2">No progress data yet!</p>
+                                <p class="text-gray-500 text-sm">Start logging workouts to track your gains</p>
                             </div>
                         ` : ''}
                     </div>
@@ -897,12 +1095,12 @@
 
                 ${state.showNameDialog ? `
                     <div class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50">
-                        <div class="bg-slate-800 rounded-2xl p-6 max-w-md w-full">
+                        <div class="glass-strong rounded-3xl p-6 hover-lift fade-in max-w-md w-full">
                             <h3 class="text-xl font-bold mb-4">Set Your Name</h3>
-                            <input type="text" value="${state.userName}" oninput="state.userName = this.value" placeholder="Enter your name" class="w-full bg-slate-700 text-white rounded-lg px-4 py-3 mb-4">
+                            <input type="text" value="${state.userName}" oninput="state.userName = this.value" placeholder="Enter your name" class="w-full glass text-white rounded-lg px-4 py-3 mb-4">
                             <div class="flex gap-3">
-                                <button onclick="state.showNameDialog = false; render();" class="flex-1 bg-slate-700 hover:bg-slate-600 py-3 rounded-lg transition">Cancel</button>
-                                <button onclick="saveUserName()" class="flex-1 bg-blue-600 hover:bg-blue-500 py-3 rounded-lg font-semibold transition">Save</button>
+                                <button onclick="state.showNameDialog = false; render();" class="flex-1 glass hover:glass-strong py-3 rounded-lg transition">Cancel</button>
+                                <button onclick="saveUserName()" class="flex-1 btn-primary hover-scale transition-all ripple py-3 rounded-lg font-semibold transition">Save</button>
                             </div>
                         </div>
                     </div>
@@ -910,18 +1108,18 @@
 
                 ${state.showPRDialog && state.prData ? `
                     <div class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50">
-                        <div class="bg-slate-800 rounded-2xl p-6 max-w-md w-full">
-                            <h3 class="text-2xl font-bold mb-4 text-center">🎉 New PR!</h3>
+                        <div class="glass-strong rounded-3xl p-6 hover-lift fade-in max-w-md w-full">
+                            <h3 class="text-2xl font-bold mb-4 text-center">ðŸŽ‰ New PR!</h3>
                             <div class="text-center mb-4">
                                 <div class="text-lg font-bold text-green-400 mb-2">${state.prData.exercise}</div>
                                 <div class="text-4xl font-bold text-blue-400 mb-1">${state.prData.weight} ${state.unit}</div>
-                                <div class="text-slate-400">× ${state.prData.reps} reps</div>
+                                <div class="text-gray-400">Ã— ${state.prData.reps} reps</div>
                             </div>
-                            <p class="text-slate-400 text-sm text-center mb-6">Would you like to share this PR?</p>
+                            <p class="text-gray-400 text-sm text-center mb-6">Would you like to share this PR?</p>
                             <div class="flex gap-3">
-                                <button onclick="savePR(false)" class="flex-1 bg-slate-700 hover:bg-slate-600 py-3 rounded-lg font-semibold transition">Just Save</button>
-                                <button onclick="savePR(true)" class="flex-1 bg-blue-600 hover:bg-blue-500 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition">
-                                    📘 Share
+                                <button onclick="savePR(false)" class="flex-1 glass hover:glass-strong py-3 rounded-lg font-semibold transition">Just Save</button>
+                                <button onclick="savePR(true)" class="flex-1 btn-primary hover-scale transition-all ripple py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition">
+                                    ðŸ“˜ Share
                                 </button>
                             </div>
                         </div>
@@ -952,7 +1150,7 @@
                 <div class="install-prompt bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-4 rounded-2xl shadow-2xl max-w-md mx-4">
                     <div class="flex items-center justify-between gap-4">
                         <div class="flex items-center gap-3">
-                            <span class="text-3xl">💪</span>
+                            <span class="text-3xl">ðŸ’ª</span>
                             <div>
                                 <div class="font-bold">Install Rocko's Gym</div>
                                 <div class="text-sm opacity-90">Add to your home screen</div>
@@ -1015,7 +1213,7 @@
         // Show iOS install instructions if on iOS and not installed
         if (isIOS() && !isInStandaloneMode() && !localStorage.getItem('iosPromptShown')) {
             setTimeout(() => {
-                if (confirm('💪 Install Rocko\'s Gym App!\n\nTap the Share button (⬆️) and then "Add to Home Screen" to install.')) {
+                if (confirm('ðŸ’ª Install Rocko\'s Gym App!\n\nTap the Share button (â¬†ï¸) and then "Add to Home Screen" to install.')) {
                     localStorage.setItem('iosPromptShown', 'true');
                 }
             }, 3000);
