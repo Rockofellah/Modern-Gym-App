@@ -175,51 +175,164 @@
     <script>
         // --- NEW: Badge Definitions ---
         const badgeData = {
-            // Workout
+            // Workout Count
             firstWorkout: { title: 'Getting Started', desc: 'Log your first workout', icon: '🎉' },
             workout10: { title: 'Dedicated', desc: 'Log 10 workouts', icon: '💪' },
+            workout25: { title: 'Committed', desc: 'Log 25 workouts', icon: '🎯' },
             workout50: { title: 'Veteran', desc: 'Log 50 workouts', icon: '🏋️' },
             workout100: { title: 'Centurion', desc: 'Log 100 workouts', icon: '💯' },
+            workout200: { title: 'Champion', desc: 'Log 200 workouts', icon: '🏆' },
+            workout365: { title: 'Year Round', desc: 'Log 365 workouts', icon: '📅' },
+            workout500: { title: 'Legend', desc: 'Log 500 workouts', icon: '👑' },
+            workout1000: { title: 'Immortal', desc: 'Log 1000 workouts', icon: '⚡' },
+            
             // Streak
+            streak3: { title: 'Hot Start', desc: 'Hit a 3-day streak', icon: '🌟' },
+            streak7: { title: 'Week Warrior', desc: 'Hit a 7-day streak', icon: '📆' },
             streak10: { title: 'On Fire', desc: 'Hit a 10-day streak', icon: '🔥' },
+            streak21: { title: 'Habit Former', desc: 'Hit a 21-day streak', icon: '🌱' },
             streak30: { title: 'Unstoppable', desc: 'Hit a 30-day streak', icon: '☄️' },
             streak65: { title: 'Relentless', desc: 'Hit a 65-day streak', icon: '⛓️' },
+            streak100: { title: 'Century Streak', desc: 'Hit a 100-day streak', icon: '💥' },
+            streak180: { title: 'Half Year', desc: 'Hit a 180-day streak', icon: '🎊' },
+            streak365: { title: 'Full Year', desc: 'Hit a 365-day streak', icon: '🎆' },
+            
             // Volume
-            volume10k: { title: 'Moving Up', desc: 'Lift 10,000 lbs/kg total volume', icon: '📈' },
-            volume100k: { title: 'Heavy Hitter', desc: 'Lift 100,000 lbs/kg total volume', icon: '💥' },
-            volume1M: { title: 'Millionaire', desc: 'Lift 1,000,000 lbs/kg total volume', icon: '💰' },
-            // Bench (Lbs)
+            volume5k: { title: 'Getting Heavy', desc: 'Lift 5,000 total volume', icon: '📊' },
+            volume10k: { title: 'Moving Up', desc: 'Lift 10,000 total volume', icon: '📈' },
+            volume25k: { title: 'Quarter Century', desc: 'Lift 25,000 total volume', icon: '🏗️' },
+            volume50k: { title: 'Halfway There', desc: 'Lift 50,000 total volume', icon: '⚙️' },
+            volume100k: { title: 'Heavy Hitter', desc: 'Lift 100,000 total volume', icon: '💥' },
+            volume250k: { title: 'Quarter Million', desc: 'Lift 250,000 total volume', icon: '🏭' },
+            volume500k: { title: 'Half Million', desc: 'Lift 500,000 total volume', icon: '🚀' },
+            volume1M: { title: 'Millionaire', desc: 'Lift 1,000,000 total volume', icon: '💰' },
+            volume5M: { title: 'Multi-Millionaire', desc: 'Lift 5,000,000 total volume', icon: '💎' },
+            
+            // Bench Press (Lbs)
+            bench95: { title: 'Bench Beginner', desc: 'Bench 95 lbs', icon: '🏋️‍♂️' },
             bench135: { title: 'One-Plate Bench', desc: 'Bench 135 lbs', icon: '🏋️‍♂️' },
+            bench185: { title: 'Solid Bench', desc: 'Bench 185 lbs', icon: '🏋️‍♂️' },
             bench225: { title: 'Two-Plate Bench', desc: 'Bench 225 lbs', icon: '🏋️‍♂️' },
+            bench275: { title: 'Strong Bench', desc: 'Bench 275 lbs', icon: '🏋️‍♂️' },
             bench315: { title: 'Three-Plate Bench', desc: 'Bench 315 lbs', icon: '🏋️‍♂️' },
+            bench365: { title: 'Elite Bench', desc: 'Bench 365 lbs', icon: '🏋️‍♂️' },
+            bench405: { title: 'Four-Plate Bench', desc: 'Bench 405 lbs', icon: '🏋️‍♂️' },
+            bench500: { title: 'Legendary Bench', desc: 'Bench 500 lbs', icon: '🏋️‍♂️' },
+            
             // Squat (Lbs)
+            squat135: { title: 'Squat Starter', desc: 'Squat 135 lbs', icon: '🦵' },
+            squat185: { title: 'Solid Squat', desc: 'Squat 185 lbs', icon: '🦵' },
             squat225: { title: 'Two-Plate Squat', desc: 'Squat 225 lbs', icon: '🦵' },
+            squat275: { title: 'Strong Squat', desc: 'Squat 275 lbs', icon: '🦵' },
             squat315: { title: 'Three-Plate Squat', desc: 'Squat 315 lbs', icon: '🦵' },
+            squat365: { title: 'Elite Squat', desc: 'Squat 365 lbs', icon: '🦵' },
             squat405: { title: 'Four-Plate Squat', desc: 'Squat 405 lbs', icon: '🦵' },
+            squat495: { title: 'Five-Plate Squat', desc: 'Squat 495 lbs', icon: '🦵' },
+            squat585: { title: 'Six-Plate Squat', desc: 'Squat 585 lbs', icon: '🦵' },
+            
             // Deadlift (Lbs)
+            deadlift135: { title: 'Deadlift Starter', desc: 'Deadlift 135 lbs', icon: '🚀' },
+            deadlift225: { title: 'Two-Plate Deadlift', desc: 'Deadlift 225 lbs', icon: '🚀' },
             deadlift315: { title: 'Three-Plate Deadlift', desc: 'Deadlift 315 lbs', icon: '🚀' },
             deadlift405: { title: 'Four-Plate Deadlift', desc: 'Deadlift 405 lbs', icon: '🚀' },
             deadlift495: { title: 'Five-Plate Deadlift', desc: 'Deadlift 495 lbs', icon: '🚀' },
+            deadlift585: { title: 'Six-Plate Deadlift', desc: 'Deadlift 585 lbs', icon: '🚀' },
+            deadlift675: { title: 'Seven-Plate Deadlift', desc: 'Deadlift 675 lbs', icon: '🚀' },
+            
             // Bench (Kg)
+            bench60kg: { title: '60kg Bench', desc: 'Bench 60 kg', icon: '🏋️‍♂️' },
+            bench80kg: { title: '80kg Bench', desc: 'Bench 80 kg', icon: '🏋️‍♂️' },
             bench100kg: { title: '100kg Bench', desc: 'Bench 100 kg', icon: '🏋️‍♂️' },
+            bench120kg: { title: '120kg Bench', desc: 'Bench 120 kg', icon: '🏋️‍♂️' },
             bench140kg: { title: '140kg Bench', desc: 'Bench 140 kg', icon: '🏋️‍♂️' },
+            bench160kg: { title: '160kg Bench', desc: 'Bench 160 kg', icon: '🏋️‍♂️' },
+            bench180kg: { title: '180kg Bench', desc: 'Bench 180 kg', icon: '🏋️‍♂️' },
+            bench200kg: { title: '200kg Bench', desc: 'Bench 200 kg', icon: '🏋️‍♂️' },
+            
             // Squat (Kg)
+            squat100kg: { title: '100kg Squat', desc: 'Squat 100 kg', icon: '🦵' },
+            squat120kg: { title: '120kg Squat', desc: 'Squat 120 kg', icon: '🦵' },
             squat140kg: { title: '140kg Squat', desc: 'Squat 140 kg', icon: '🦵' },
+            squat160kg: { title: '160kg Squat', desc: 'Squat 160 kg', icon: '🦵' },
             squat180kg: { title: '180kg Squat', desc: 'Squat 180 kg', icon: '🦵' },
+            squat200kg: { title: '200kg Squat', desc: 'Squat 200 kg', icon: '🦵' },
+            squat220kg: { title: '220kg Squat', desc: 'Squat 220 kg', icon: '🦵' },
+            squat250kg: { title: '250kg Squat', desc: 'Squat 250 kg', icon: '🦵' },
+            
             // Deadlift (Kg)
+            deadlift100kg: { title: '100kg Deadlift', desc: 'Deadlift 100 kg', icon: '🚀' },
+            deadlift140kg: { title: '140kg Deadlift', desc: 'Deadlift 140 kg', icon: '🚀' },
             deadlift180kg: { title: '180kg Deadlift', desc: 'Deadlift 180 kg', icon: '🚀' },
             deadlift220kg: { title: '220kg Deadlift', desc: 'Deadlift 220 kg', icon: '🚀' },
+            deadlift260kg: { title: '260kg Deadlift', desc: 'Deadlift 260 kg', icon: '🚀' },
+            deadlift300kg: { title: '300kg Deadlift', desc: 'Deadlift 300 kg', icon: '🚀' },
+            
+            // Bodyweight Ratio Badges - Male
+            benchBodyweightMale: { title: 'Bodyweight Bench (M)', desc: 'Bench 1x bodyweight (Male)', icon: '💪', requirement: { gender: 'male', exercise: 'bench', ratio: 1.0 } },
+            bench125BodyweightMale: { title: 'Bench 1.25x BW (M)', desc: 'Bench 1.25x bodyweight (Male)', icon: '💪', requirement: { gender: 'male', exercise: 'bench', ratio: 1.25 } },
+            bench15BodyweightMale: { title: 'Bench 1.5x BW (M)', desc: 'Bench 1.5x bodyweight (Male)', icon: '💪', requirement: { gender: 'male', exercise: 'bench', ratio: 1.5 } },
+            bench2BodyweightMale: { title: 'Bench 2x BW (M)', desc: 'Bench 2x bodyweight (Male)', icon: '💪', requirement: { gender: 'male', exercise: 'bench', ratio: 2.0 } },
+            
+            squatBodyweightMale: { title: 'Bodyweight Squat (M)', desc: 'Squat 1x bodyweight (Male)', icon: '🦵', requirement: { gender: 'male', exercise: 'squat', ratio: 1.0 } },
+            squat15BodyweightMale: { title: 'Squat 1.5x BW (M)', desc: 'Squat 1.5x bodyweight (Male)', icon: '🦵', requirement: { gender: 'male', exercise: 'squat', ratio: 1.5 } },
+            squat2BodyweightMale: { title: 'Squat 2x BW (M)', desc: 'Squat 2x bodyweight (Male)', icon: '🦵', requirement: { gender: 'male', exercise: 'squat', ratio: 2.0 } },
+            squat25BodyweightMale: { title: 'Squat 2.5x BW (M)', desc: 'Squat 2.5x bodyweight (Male)', icon: '🦵', requirement: { gender: 'male', exercise: 'squat', ratio: 2.5 } },
+            squat3BodyweightMale: { title: 'Squat 3x BW (M)', desc: 'Squat 3x bodyweight (Male)', icon: '🦵', requirement: { gender: 'male', exercise: 'squat', ratio: 3.0 } },
+            
+            deadlift15BodyweightMale: { title: 'Deadlift 1.5x BW (M)', desc: 'Deadlift 1.5x bodyweight (Male)', icon: '🚀', requirement: { gender: 'male', exercise: 'deadlift', ratio: 1.5 } },
+            deadlift2BodyweightMale: { title: 'Deadlift 2x BW (M)', desc: 'Deadlift 2x bodyweight (Male)', icon: '🚀', requirement: { gender: 'male', exercise: 'deadlift', ratio: 2.0 } },
+            deadlift25BodyweightMale: { title: 'Deadlift 2.5x BW (M)', desc: 'Deadlift 2.5x bodyweight (Male)', icon: '🚀', requirement: { gender: 'male', exercise: 'deadlift', ratio: 2.5 } },
+            deadlift3BodyweightMale: { title: 'Deadlift 3x BW (M)', desc: 'Deadlift 3x bodyweight (Male)', icon: '🚀', requirement: { gender: 'male', exercise: 'deadlift', ratio: 3.0 } },
+            
+            // Bodyweight Ratio Badges - Female
+            benchBodyweightFemale: { title: 'Bodyweight Bench (F)', desc: 'Bench 0.75x bodyweight (Female)', icon: '💪', requirement: { gender: 'female', exercise: 'bench', ratio: 0.75 } },
+            bench1BodyweightFemale: { title: 'Bench 1x BW (F)', desc: 'Bench 1x bodyweight (Female)', icon: '💪', requirement: { gender: 'female', exercise: 'bench', ratio: 1.0 } },
+            bench125BodyweightFemale: { title: 'Bench 1.25x BW (F)', desc: 'Bench 1.25x bodyweight (Female)', icon: '💪', requirement: { gender: 'female', exercise: 'bench', ratio: 1.25 } },
+            bench15BodyweightFemale: { title: 'Bench 1.5x BW (F)', desc: 'Bench 1.5x bodyweight (Female)', icon: '💪', requirement: { gender: 'female', exercise: 'bench', ratio: 1.5 } },
+            
+            squatBodyweightFemale: { title: 'Bodyweight Squat (F)', desc: 'Squat 1x bodyweight (Female)', icon: '🦵', requirement: { gender: 'female', exercise: 'squat', ratio: 1.0 } },
+            squat125BodyweightFemale: { title: 'Squat 1.25x BW (F)', desc: 'Squat 1.25x bodyweight (Female)', icon: '🦵', requirement: { gender: 'female', exercise: 'squat', ratio: 1.25 } },
+            squat15BodyweightFemale: { title: 'Squat 1.5x BW (F)', desc: 'Squat 1.5x bodyweight (Female)', icon: '🦵', requirement: { gender: 'female', exercise: 'squat', ratio: 1.5 } },
+            squat2BodyweightFemale: { title: 'Squat 2x BW (F)', desc: 'Squat 2x bodyweight (Female)', icon: '🦵', requirement: { gender: 'female', exercise: 'squat', ratio: 2.0 } },
+            squat25BodyweightFemale: { title: 'Squat 2.5x BW (F)', desc: 'Squat 2.5x bodyweight (Female)', icon: '🦵', requirement: { gender: 'female', exercise: 'squat', ratio: 2.5 } },
+            
+            deadlift125BodyweightFemale: { title: 'Deadlift 1.25x BW (F)', desc: 'Deadlift 1.25x bodyweight (Female)', icon: '🚀', requirement: { gender: 'female', exercise: 'deadlift', ratio: 1.25 } },
+            deadlift15BodyweightFemale: { title: 'Deadlift 1.5x BW (F)', desc: 'Deadlift 1.5x bodyweight (Female)', icon: '🚀', requirement: { gender: 'female', exercise: 'deadlift', ratio: 1.5 } },
+            deadlift2BodyweightFemale: { title: 'Deadlift 2x BW (F)', desc: 'Deadlift 2x bodyweight (Female)', icon: '🚀', requirement: { gender: 'female', exercise: 'deadlift', ratio: 2.0 } },
+            deadlift25BodyweightFemale: { title: 'Deadlift 2.5x BW (F)', desc: 'Deadlift 2.5x bodyweight (Female)', icon: '🚀', requirement: { gender: 'female', exercise: 'deadlift', ratio: 2.5 } },
+            
+            // Age-based achievements
+            lifter20s: { title: 'Young Gun', desc: 'Log 50 workouts in your 20s', icon: '🔫', requirement: { ageRange: [20, 29], workouts: 50 } },
+            lifter30s: { title: 'Prime Time', desc: 'Log 50 workouts in your 30s', icon: '⭐', requirement: { ageRange: [30, 39], workouts: 50 } },
+            lifter40s: { title: 'Master', desc: 'Log 50 workouts in your 40s', icon: '🎖️', requirement: { ageRange: [40, 49], workouts: 50 } },
+            lifter50s: { title: 'Veteran', desc: 'Log 50 workouts in your 50s', icon: '🏅', requirement: { ageRange: [50, 59], workouts: 50 } },
+            lifter60plus: { title: 'Legend', desc: 'Log 50 workouts at 60+', icon: '👑', requirement: { ageRange: [60, 120], workouts: 50 } },
+            
             // Consistency
             earlyBird: { title: 'Early Bird', desc: 'Log 10 workouts before 7 AM', icon: '🐦' },
             nightOwl: { title: 'Night Owl', desc: 'Log 10 workouts after 9 PM', icon: '🦉' },
+            weekendWarrior: { title: 'Weekend Warrior', desc: 'Log 20 weekend workouts', icon: '🗓️' },
+            everydayAthlete: { title: 'Everyday Athlete', desc: 'Log 30 weekday workouts', icon: '📋' },
+            
+            // Cardio
             cardioKing: { title: 'Cardio King', desc: 'Log 20 cardio sessions', icon: '🏃‍♂️' },
+            cardio50: { title: 'Cardio Enthusiast', desc: 'Log 50 cardio sessions', icon: '🏃' },
+            cardio100: { title: 'Cardio Fanatic', desc: 'Log 100 cardio sessions', icon: '🏃‍♀️' },
+            marathon: { title: 'Marathon Runner', desc: 'Run for 240+ min cumulative', icon: '🎽' },
+            
+            // Misc
+            allRounder: { title: 'All-Rounder', desc: 'Log 5+ different exercises in one workout', icon: '🎭' },
+            diverseTrainer: { title: 'Diverse Trainer', desc: 'Log 20+ different exercises total', icon: '🌈' },
+            masterOfAll: { title: 'Master of All', desc: 'Log 50+ different exercises total', icon: '🎨' },
         };
 
         // State Management
         let state = {
             view: 'home', 
-            weight: '', unit: 'lbs', bar: 'standard', exercise: 'squat', bodyweight: '',
-            gender: 'male', category: 'natural', strengthWeight: '', 
+            weight: '', unit: 'lbs', bar: 'standard', exercise: 'squat', bodyweight: localStorage.getItem('bodyweight') || '',
+            gender: localStorage.getItem('gender') || 'male', 
+            age: localStorage.getItem('age') || '',
+            category: 'natural', strengthWeight: '', 
             userName: localStorage.getItem('userName') || '',
             workouts: JSON.parse(localStorage.getItem('workouts') || '[]'),
             plans: JSON.parse(localStorage.getItem('plans') || '{}'),
@@ -357,11 +470,11 @@
             let newBadges = [];
             const currentBadgeSet = new Set(state.badges);
             
-            // --- Helper function to check & add badge ---
+            // Helper function to check & add badge
             function checkBadge(badgeId, condition) {
                 if (condition && !currentBadgeSet.has(badgeId)) {
                     newBadges.push(badgeId);
-                    currentBadgeSet.add(badgeId); // Add to set to prevent duplicates in same run
+                    currentBadgeSet.add(badgeId);
                 }
             }
 
@@ -369,64 +482,212 @@
             const totalWorkouts = state.workouts.length;
             checkBadge('firstWorkout', totalWorkouts === 1);
             checkBadge('workout10', totalWorkouts >= 10);
+            checkBadge('workout25', totalWorkouts >= 25);
             checkBadge('workout50', totalWorkouts >= 50);
             checkBadge('workout100', totalWorkouts >= 100);
+            checkBadge('workout200', totalWorkouts >= 200);
+            checkBadge('workout365', totalWorkouts >= 365);
+            checkBadge('workout500', totalWorkouts >= 500);
+            checkBadge('workout1000', totalWorkouts >= 1000);
 
             // 2. Streak
             const currentStreak = getStreak();
+            checkBadge('streak3', currentStreak >= 3);
+            checkBadge('streak7', currentStreak >= 7);
             checkBadge('streak10', currentStreak >= 10);
+            checkBadge('streak21', currentStreak >= 21);
             checkBadge('streak30', currentStreak >= 30);
             checkBadge('streak65', currentStreak >= 65);
+            checkBadge('streak100', currentStreak >= 100);
+            checkBadge('streak180', currentStreak >= 180);
+            checkBadge('streak365', currentStreak >= 365);
 
-            // 3. Totals (Volume, Cardio, Time)
+            // 3. Volume, Cardio, Time-based
             let totalVolume = 0;
             let cardioSessions = 0;
+            let totalCardioTime = 0;
             let earlyBirds = 0;
             let nightOwls = 0;
+            let weekendWorkouts = 0;
+            let weekdayWorkouts = 0;
+            let uniqueExercises = new Set();
+            
             state.workouts.forEach(w => {
                 totalVolume += (w.volume || 0);
-                if (w.activities.some(a => a.type === 'cardio')) cardioSessions++;
+                if (w.activities.some(a => a.type === 'cardio')) {
+                    cardioSessions++;
+                    w.activities.forEach(a => {
+                        if (a.type === 'cardio' && a.duration) {
+                            totalCardioTime += parseFloat(a.duration);
+                        }
+                    });
+                }
+                w.activities.forEach(a => {
+                    if (a.exercise) uniqueExercises.add(a.exercise);
+                });
                 const hour = new Date(w.date).getHours();
+                const day = new Date(w.date).getDay();
                 if (hour < 7) earlyBirds++;
                 if (hour >= 21) nightOwls++;
+                if (day === 0 || day === 6) weekendWorkouts++;
+                else weekdayWorkouts++;
             });
+            
+            checkBadge('volume5k', totalVolume >= 5000);
             checkBadge('volume10k', totalVolume >= 10000);
+            checkBadge('volume25k', totalVolume >= 25000);
+            checkBadge('volume50k', totalVolume >= 50000);
             checkBadge('volume100k', totalVolume >= 100000);
+            checkBadge('volume250k', totalVolume >= 250000);
+            checkBadge('volume500k', totalVolume >= 500000);
             checkBadge('volume1M', totalVolume >= 1000000);
+            checkBadge('volume5M', totalVolume >= 5000000);
+            
             checkBadge('cardioKing', cardioSessions >= 20);
+            checkBadge('cardio50', cardioSessions >= 50);
+            checkBadge('cardio100', cardioSessions >= 100);
+            checkBadge('marathon', totalCardioTime >= 240);
+            
             checkBadge('earlyBird', earlyBirds >= 10);
             checkBadge('nightOwl', nightOwls >= 10);
+            checkBadge('weekendWarrior', weekendWorkouts >= 20);
+            checkBadge('everydayAthlete', weekdayWorkouts >= 30);
+            
+            checkBadge('diverseTrainer', uniqueExercises.size >= 20);
+            checkBadge('masterOfAll', uniqueExercises.size >= 50);
 
-            // 4. Lifts from this workout
+            // 4. Lifts from this workout - Absolute weights
             const activities = workout.activities || [];
+            let exercisesInWorkout = new Set();
             activities.forEach(a => {
-                if (a.type !== 'strength') return;
-                const weight = parseFloat(a.weight);
-                const weightLbs = a.unit === 'kg' ? weight * 2.20462 : weight;
-                const weightKg = a.unit === 'lbs' ? weight / 2.20462 : weight;
+                if (a.type === 'strength' && a.exercise) {
+                    exercisesInWorkout.add(a.exercise);
+                    const weight = parseFloat(a.weight);
+                    const weightLbs = a.unit === 'kg' ? weight * 2.20462 : weight;
+                    const weightKg = a.unit === 'lbs' ? weight / 2.20462 : weight;
 
-                if (a.exercise === 'Bench Press') {
-                    checkBadge('bench135', weightLbs >= 135);
-                    checkBadge('bench225', weightLbs >= 225);
-                    checkBadge('bench315', weightLbs >= 315);
-                    checkBadge('bench100kg', weightKg >= 100);
-                    checkBadge('bench140kg', weightKg >= 140);
-                }
-                if (a.exercise === 'Squat') {
-                    checkBadge('squat225', weightLbs >= 225);
-                    checkBadge('squat315', weightLbs >= 315);
-                    checkBadge('squat405', weightLbs >= 405);
-                    checkBadge('squat140kg', weightKg >= 140);
-                    checkBadge('squat180kg', weightKg >= 180);
-                }
-                if (a.exercise === 'Deadlift') {
-                    checkBadge('deadlift315', weightLbs >= 315);
-                    checkBadge('deadlift405', weightLbs >= 405);
-                    checkBadge('deadlift495', weightLbs >= 495);
-                    checkBadge('deadlift180kg', weightKg >= 180);
-                    checkBadge('deadlift220kg', weightKg >= 220);
+                    if (a.exercise === 'Bench Press') {
+                        checkBadge('bench95', weightLbs >= 95);
+                        checkBadge('bench135', weightLbs >= 135);
+                        checkBadge('bench185', weightLbs >= 185);
+                        checkBadge('bench225', weightLbs >= 225);
+                        checkBadge('bench275', weightLbs >= 275);
+                        checkBadge('bench315', weightLbs >= 315);
+                        checkBadge('bench365', weightLbs >= 365);
+                        checkBadge('bench405', weightLbs >= 405);
+                        checkBadge('bench500', weightLbs >= 500);
+                        checkBadge('bench60kg', weightKg >= 60);
+                        checkBadge('bench80kg', weightKg >= 80);
+                        checkBadge('bench100kg', weightKg >= 100);
+                        checkBadge('bench120kg', weightKg >= 120);
+                        checkBadge('bench140kg', weightKg >= 140);
+                        checkBadge('bench160kg', weightKg >= 160);
+                        checkBadge('bench180kg', weightKg >= 180);
+                        checkBadge('bench200kg', weightKg >= 200);
+                    }
+                    if (a.exercise === 'Squat') {
+                        checkBadge('squat135', weightLbs >= 135);
+                        checkBadge('squat185', weightLbs >= 185);
+                        checkBadge('squat225', weightLbs >= 225);
+                        checkBadge('squat275', weightLbs >= 275);
+                        checkBadge('squat315', weightLbs >= 315);
+                        checkBadge('squat365', weightLbs >= 365);
+                        checkBadge('squat405', weightLbs >= 405);
+                        checkBadge('squat495', weightLbs >= 495);
+                        checkBadge('squat585', weightLbs >= 585);
+                        checkBadge('squat100kg', weightKg >= 100);
+                        checkBadge('squat120kg', weightKg >= 120);
+                        checkBadge('squat140kg', weightKg >= 140);
+                        checkBadge('squat160kg', weightKg >= 160);
+                        checkBadge('squat180kg', weightKg >= 180);
+                        checkBadge('squat200kg', weightKg >= 200);
+                        checkBadge('squat220kg', weightKg >= 220);
+                        checkBadge('squat250kg', weightKg >= 250);
+                    }
+                    if (a.exercise === 'Deadlift') {
+                        checkBadge('deadlift135', weightLbs >= 135);
+                        checkBadge('deadlift225', weightLbs >= 225);
+                        checkBadge('deadlift315', weightLbs >= 315);
+                        checkBadge('deadlift405', weightLbs >= 405);
+                        checkBadge('deadlift495', weightLbs >= 495);
+                        checkBadge('deadlift585', weightLbs >= 585);
+                        checkBadge('deadlift675', weightLbs >= 675);
+                        checkBadge('deadlift100kg', weightKg >= 100);
+                        checkBadge('deadlift140kg', weightKg >= 140);
+                        checkBadge('deadlift180kg', weightKg >= 180);
+                        checkBadge('deadlift220kg', weightKg >= 220);
+                        checkBadge('deadlift260kg', weightKg >= 260);
+                        checkBadge('deadlift300kg', weightKg >= 300);
+                    }
+                    
+                    // Bodyweight ratio badges
+                    const userBodyweight = parseFloat(state.bodyweight);
+                    const userGender = state.gender;
+                    if (userBodyweight > 0) {
+                        const bodyweightLbs = state.unit === 'kg' ? userBodyweight * 2.20462 : userBodyweight;
+                        const ratio = weightLbs / bodyweightLbs;
+                        
+                        // Male bodyweight ratio badges
+                        if (userGender === 'male') {
+                            if (a.exercise === 'Bench Press') {
+                                checkBadge('benchBodyweightMale', ratio >= 1.0);
+                                checkBadge('bench125BodyweightMale', ratio >= 1.25);
+                                checkBadge('bench15BodyweightMale', ratio >= 1.5);
+                                checkBadge('bench2BodyweightMale', ratio >= 2.0);
+                            }
+                            if (a.exercise === 'Squat') {
+                                checkBadge('squatBodyweightMale', ratio >= 1.0);
+                                checkBadge('squat15BodyweightMale', ratio >= 1.5);
+                                checkBadge('squat2BodyweightMale', ratio >= 2.0);
+                                checkBadge('squat25BodyweightMale', ratio >= 2.5);
+                                checkBadge('squat3BodyweightMale', ratio >= 3.0);
+                            }
+                            if (a.exercise === 'Deadlift') {
+                                checkBadge('deadlift15BodyweightMale', ratio >= 1.5);
+                                checkBadge('deadlift2BodyweightMale', ratio >= 2.0);
+                                checkBadge('deadlift25BodyweightMale', ratio >= 2.5);
+                                checkBadge('deadlift3BodyweightMale', ratio >= 3.0);
+                            }
+                        }
+                        
+                        // Female bodyweight ratio badges
+                        if (userGender === 'female') {
+                            if (a.exercise === 'Bench Press') {
+                                checkBadge('benchBodyweightFemale', ratio >= 0.75);
+                                checkBadge('bench1BodyweightFemale', ratio >= 1.0);
+                                checkBadge('bench125BodyweightFemale', ratio >= 1.25);
+                                checkBadge('bench15BodyweightFemale', ratio >= 1.5);
+                            }
+                            if (a.exercise === 'Squat') {
+                                checkBadge('squatBodyweightFemale', ratio >= 1.0);
+                                checkBadge('squat125BodyweightFemale', ratio >= 1.25);
+                                checkBadge('squat15BodyweightFemale', ratio >= 1.5);
+                                checkBadge('squat2BodyweightFemale', ratio >= 2.0);
+                                checkBadge('squat25BodyweightFemale', ratio >= 2.5);
+                            }
+                            if (a.exercise === 'Deadlift') {
+                                checkBadge('deadlift125BodyweightFemale', ratio >= 1.25);
+                                checkBadge('deadlift15BodyweightFemale', ratio >= 1.5);
+                                checkBadge('deadlift2BodyweightFemale', ratio >= 2.0);
+                                checkBadge('deadlift25BodyweightFemale', ratio >= 2.5);
+                            }
+                        }
+                    }
                 }
             });
+            
+            // 5. All-rounder badge (5+ exercises in one workout)
+            checkBadge('allRounder', exercisesInWorkout.size >= 5);
+            
+            // 6. Age-based badges
+            const userAge = parseInt(state.age);
+            if (userAge > 0) {
+                if (userAge >= 20 && userAge <= 29) checkBadge('lifter20s', totalWorkouts >= 50);
+                if (userAge >= 30 && userAge <= 39) checkBadge('lifter30s', totalWorkouts >= 50);
+                if (userAge >= 40 && userAge <= 49) checkBadge('lifter40s', totalWorkouts >= 50);
+                if (userAge >= 50 && userAge <= 59) checkBadge('lifter50s', totalWorkouts >= 50);
+                if (userAge >= 60) checkBadge('lifter60plus', totalWorkouts >= 50);
+            }
 
             if (newBadges.length > 0) {
                 state.badges = Array.from(currentBadgeSet);
@@ -442,10 +703,175 @@
         function handleCalculatePlates() { state.plateResult = calculatePlates(); render(); }
         
         // Calculator Functions (calculatePlates, calculate1RM, calculateStrength)
-        function calculatePlates() { /* ... unchanged ... */ return { plates: [] }; }
-        function calculate1RM() { /* ... unchanged ... */ return { avg: 0, percentages: {} }; }
-        function calculateStrength() { /* ... unchanged ... */ return { level: 'beginner', ratio: 0, progress: 0, nextLevel: 'untrained', nextWeight: 0 }; }
-        // (Full calculator functions omitted for brevity, they are unchanged)
+        function calculatePlates() {
+            const target = parseFloat(state.weight);
+            
+            // Validate input
+            if (!target || isNaN(target) || target <= 0) return null;
+            
+            const barWeight = bars[state.bar][state.unit];
+            
+            // Check if weight is less than or equal to bar weight
+            if (target <= barWeight) {
+                return { error: 'Weight must be greater than bar weight' };
+            }
+            
+            const weightToLoad = target - barWeight;
+            const perSide = weightToLoad / 2;
+            const result = [];
+            let remaining = perSide;
+            
+            // Calculate plates needed
+            for (const plate of plates[state.unit]) {
+                const count = Math.floor(remaining / plate);
+                if (count > 0) {
+                    result.push({ weight: plate, count });
+                    remaining -= plate * count;
+                }
+            }
+            
+            // Check if there's remaining weight that can't be loaded
+            const tolerance = state.unit === 'kg' ? 0.1 : 0.5;
+            if (remaining > tolerance) {
+                const actualWeight = target - (remaining * 2);
+                return { 
+                    error: `Closest possible: ${actualWeight.toFixed(1)} ${state.unit} (${(remaining * 2).toFixed(1)} ${state.unit} short)`, 
+                    plates: result 
+                };
+            }
+            
+            return { plates: result };
+        }
+
+        function calculate1RM() {
+            const weight = parseFloat(state.repWeight);
+            const reps = parseInt(state.reps);
+            
+            // Validate inputs
+            if (!weight || isNaN(weight) || weight <= 0) return null;
+            if (!reps || isNaN(reps) || reps <= 0 || reps > 12) return null;
+            
+            // If 1 rep, that's the 1RM
+            if (reps === 1) {
+                const percentages = {};
+                [95, 90, 85, 80, 75, 70, 65, 60].forEach(pct => {
+                    percentages[pct] = (weight * pct / 100).toFixed(1);
+                });
+                return { avg: weight.toFixed(1), percentages };
+            }
+            
+            // Epley formula: 1RM = weight × (1 + reps/30)
+            const epley = weight * (1 + reps / 30);
+            // Brzycki formula: 1RM = weight × (36/(37-reps))
+            const brzycki = weight * (36 / (37 - reps));
+            // Average of both formulas
+            const avg = (epley + brzycki) / 2;
+            
+            const percentages = {};
+            [95, 90, 85, 80, 75, 70, 65, 60].forEach(pct => {
+                percentages[pct] = (avg * pct / 100).toFixed(1);
+            });
+            
+            return { avg: avg.toFixed(1), percentages };
+        }
+
+        function calculateStrength() {
+            const bodyweight = parseFloat(state.bodyweight);
+            const weight = parseFloat(state.strengthWeight || state.weight);
+            
+            // Validate inputs
+            if (!bodyweight || isNaN(bodyweight) || bodyweight <= 0) return null;
+            if (!weight || isNaN(weight) || weight <= 0) return null;
+            
+            // Check if exercise has strength standards
+            const standardData = {
+                natural: {
+                    male: {
+                        squat: {untrained: 0.65, novice: 1.15, intermediate: 1.70, advanced: 2.20, elite: 2.75},
+                        bench: {untrained: 0.50, novice: 0.75, intermediate: 1.25, advanced: 1.75, elite: 2.25},
+                        deadlift: {untrained: 0.80, novice: 1.40, intermediate: 2.00, advanced: 2.60, elite: 3.25},
+                        ohp: {untrained: 0.35, novice: 0.55, intermediate: 0.85, advanced: 1.15, elite: 1.50},
+                        row: {untrained: 0.40, novice: 0.70, intermediate: 1.10, advanced: 1.50, elite: 1.90}
+                    },
+                    female: {
+                        squat: {untrained: 0.45, novice: 0.75, intermediate: 1.20, advanced: 1.60, elite: 2.05},
+                        bench: {untrained: 0.30, novice: 0.50, intermediate: 0.80, advanced: 1.10, elite: 1.45},
+                        deadlift: {untrained: 0.55, novice: 0.95, intermediate: 1.45, advanced: 1.90, elite: 2.45},
+                        ohp: {untrained: 0.20, novice: 0.35, intermediate: 0.55, advanced: 0.75, elite: 1.00},
+                        row: {untrained: 0.25, novice: 0.45, intermediate: 0.75, advanced: 1.00, elite: 1.30}
+                    }
+                },
+                enhanced: {
+                    male: {
+                        squat: {untrained: 0.65, novice: 1.15, intermediate: 1.90, advanced: 2.60, elite: 3.50},
+                        bench: {untrained: 0.50, novice: 0.75, intermediate: 1.40, advanced: 2.10, elite: 2.90},
+                        deadlift: {untrained: 0.80, novice: 1.40, intermediate: 2.20, advanced: 3.00, elite: 4.20},
+                        ohp: {untrained: 0.35, novice: 0.55, intermediate: 0.95, advanced: 1.40, elite: 1.95},
+                        row: {untrained: 0.40, novice: 0.70, intermediate: 1.25, advanced: 1.80, elite: 2.45}
+                    },
+                    female: {
+                        squat: {untrained: 0.45, novice: 0.75, intermediate: 1.35, advanced: 1.95, elite: 2.70},
+                        bench: {untrained: 0.30, novice: 0.50, intermediate: 0.95, advanced: 1.40, elite: 1.95},
+                        deadlift: {untrained: 0.55, novice: 0.95, intermediate: 1.65, advanced: 2.35, elite: 3.25},
+                        ohp: {untrained: 0.20, novice: 0.35, intermediate: 0.65, advanced: 0.95, elite: 1.35},
+                        row: {untrained: 0.25, novice: 0.45, intermediate: 0.90, advanced: 1.30, elite: 1.75}
+                    }
+                }
+            };
+            
+            if (!standardData[state.category]?.[state.gender]?.[state.exercise]) {
+                return null;
+            }
+            
+            // Convert to lbs for calculation
+            const weightLbs = state.unit === 'kg' ? weight * 2.20462 : weight;
+            const bodyweightLbs = state.unit === 'kg' ? bodyweight * 2.20462 : bodyweight;
+            const ratio = weightLbs / bodyweightLbs;
+            
+            const standards = standardData[state.category][state.gender][state.exercise];
+            
+            let level = 'beginner';
+            let progress = 0;
+            let nextLevel = 'untrained';
+            
+            if (ratio >= standards.elite) {
+                level = 'elite';
+                progress = 100;
+                nextLevel = 'elite';
+            } else if (ratio >= standards.advanced) {
+                level = 'advanced';
+                nextLevel = 'elite';
+                progress = ((ratio - standards.advanced) / (standards.elite - standards.advanced)) * 100;
+            } else if (ratio >= standards.intermediate) {
+                level = 'intermediate';
+                nextLevel = 'advanced';
+                progress = ((ratio - standards.intermediate) / (standards.advanced - standards.intermediate)) * 100;
+            } else if (ratio >= standards.novice) {
+                level = 'novice';
+                nextLevel = 'intermediate';
+                progress = ((ratio - standards.novice) / (standards.intermediate - standards.novice)) * 100;
+            } else if (ratio >= standards.untrained) {
+                level = 'untrained';
+                nextLevel = 'novice';
+                progress = ((ratio - standards.untrained) / (standards.novice - standards.untrained)) * 100;
+            } else {
+                level = 'beginner';
+                nextLevel = 'untrained';
+                progress = (ratio / standards.untrained) * 100;
+            }
+            
+            const nextWeight = standards[nextLevel] ? (standards[nextLevel] * bodyweightLbs) : null;
+            const nextWeightConverted = nextWeight ? 
+                (state.unit === 'kg' ? (nextWeight / 2.20462).toFixed(1) : nextWeight.toFixed(0)) : null;
+            
+            return {
+                level,
+                ratio: ratio.toFixed(2),
+                progress: Math.min(progress, 100).toFixed(0),
+                nextLevel,
+                nextWeight: nextWeightConverted
+            };
+        }
 
 
         // Add Activity
@@ -589,7 +1015,18 @@
         // Check PR (Manual)
         function checkPR(exerciseName, weight, reps) { /* ... unchanged ... */ }
         // Share PR
-        function sharePR(pr) { /* ... unchanged ... */ }
+        function sharePR(pr) {
+            const msg = `🎉 New PR! ${state.userName || 'I'} just hit ${pr.weight} ${pr.unit}${pr.reps ? ` × ${pr.reps}` : ''} on ${pr.exercise}! 💪`;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'New Personal Record!',
+                    text: msg,
+                    url: window.location.href
+                }).catch(err => console.log('Error sharing', err));
+            } else {
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(msg)}`, '_blank');
+            }
+        }
 
         // Save PR
         function savePR(share) {
@@ -613,7 +1050,13 @@
         }
 
         // Delete PR
-        function deletePR(id) { /* ... unchanged ... */ }
+        function deletePR(id) {
+            if (confirm('Are you sure you want to delete this PR?')) {
+                state.prs = state.prs.filter(pr => pr.id !== id);
+                localStorage.setItem('prs', JSON.stringify(state.prs));
+                render();
+            }
+        }
         // Share Workout
         function shareWorkout(workout) { /* ... unchanged ... */ }
 
@@ -647,7 +1090,14 @@
         // Share Streak
         function shareStreak() { /* ... unchanged ... */ }
         // Save User Name
-        function saveUserName() { /* ... unchanged ... */ }
+        function saveUserName() {
+            localStorage.setItem('userName', state.userName);
+            localStorage.setItem('gender', state.gender);
+            localStorage.setItem('age', state.age);
+            localStorage.setItem('bodyweight', state.bodyweight);
+            state.showNameDialog = false;
+            render();
+        }
         // Delete Workout
         function deleteWorkout(id) { /* ... unchanged ... */ }
         // Get Progress Data
@@ -1534,8 +1984,18 @@
                 ${state.showNameDialog ? `
                     <div class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50">
                         <div class="glass-strong rounded-3xl p-6 hover-lift fade-in max-w-md w-full">
-                            <h3 class="text-xl font-bold mb-4">Set Your Name</h3>
-                            <input type="text" value="${state.userName}" oninput="state.userName = this.value" placeholder="Enter your name" class="w-full glass text-white rounded-lg px-4 py-3 mb-4">
+                            <h3 class="text-xl font-bold mb-4">Profile Settings</h3>
+                            <input type="text" value="${state.userName}" oninput="state.userName = this.value" placeholder="Your name" class="w-full glass text-white rounded-lg px-4 py-3 mb-3">
+                            
+                            <select onchange="state.gender = this.value" class="w-full glass text-white rounded-lg px-4 py-3 mb-3">
+                                <option value="male" ${state.gender === 'male' ? 'selected' : ''}>Male</option>
+                                <option value="female" ${state.gender === 'female' ? 'selected' : ''}>Female</option>
+                            </select>
+                            
+                            <input type="number" value="${state.age}" oninput="state.age = this.value" placeholder="Age" class="w-full glass text-white rounded-lg px-4 py-3 mb-3">
+                            
+                            <input type="number" step="0.1" value="${state.bodyweight}" oninput="state.bodyweight = this.value" placeholder="Bodyweight (${state.unit})" class="w-full glass text-white rounded-lg px-4 py-3 mb-4">
+                            
                             <div class="flex gap-3">
                                 <button onclick="state.showNameDialog = false; render();" class="flex-1 glass hover:glass-strong py-3 rounded-lg transition">Cancel</button>
                                 <button onclick="saveUserName()" class="flex-1 btn-primary hover-scale transition-all ripple py-3 rounded-lg font-semibold transition">Save</button>
