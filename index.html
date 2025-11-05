@@ -12,8 +12,8 @@
     <meta name="apple-mobile-web-app-title" content="Rocko's Gym">
     <link rel="manifest" href="manifest.json">
     
-    <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>💪</text></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>💪</text></svg>">
+    <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E💪%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E💪%3C/text%3E%3C/svg%3E">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -238,10 +238,42 @@
             width: 300px;
             height: 300px;
         }
+
+        #confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 20px;
+            opacity: 0.7;
+            animation: confetti-fall 3s ease-out forwards;
+        }
+        
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body class="bg-animated text-white min-h-screen">
     <div class="fixed inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5 pointer-events-none"></div>
+    
+    <div id="confetti-container"></div>
     
     <div id="app" class="relative max-w-6xl mx-auto p-4 md:p-6"></div>
 
@@ -249,13 +281,14 @@
         // State Management
         let state = {
             view: 'calc',
-            weight: '',
-            unit: 'lbs',
+            weight: '', // For Plate Calculator
+            unit: 'lbs', // SHARED unit for all calculators
             bar: 'standard',
-            exercise: 'squat',
+            exercise: 'squat', // For Strength Standards
             bodyweight: '',
             gender: 'male',
             category: 'natural',
+            strengthWeight: '', // For Strength Standards weight
             userName: localStorage.getItem('userName') || '',
             workouts: JSON.parse(localStorage.getItem('workouts') || '[]'),
             plans: JSON.parse(localStorage.getItem('plans') || '{}'),
@@ -275,8 +308,8 @@
             showNameDialog: false,
             showPRDialog: false,
             prData: null,
-            repWeight: '',
-            reps: '',
+            repWeight: '', // For 1RM
+            reps: '', // For 1RM
             selectedDate: new Date(),
             calendarMonth: new Date().getMonth(),
             calendarYear: new Date().getFullYear(),
@@ -288,16 +321,20 @@
             planCardioExercise: 'run',
             planCardioDuration: '',
             planNotes: '',
-            planRoutineId: ''
+            planRoutineId: '',
+            pendingWorkout: null,
+            pendingPRs: [],
+            strengthResult: null,
+            oneRMResult: null,
+            plateResult: null
         };
 
-        // *** DATA MIGRATION FIX ***
-        // Run once on load to update old data structures
+        // --- DATA MIGRATION FIX ---
         (function migrateData() {
             let needsSave = false;
             state.workouts.forEach(w => {
                 if (w.sets && !w.activities) {
-                    w.activities = w.sets;
+                    w.activities = w.sets.map(s => ({...s, type: 'strength'})); // Add type
                     delete w.sets;
                     needsSave = true;
                 }
@@ -415,6 +452,74 @@
             lbs: [45, 35, 25, 10, 5, 2.5], 
             kg: [25, 20, 15, 10, 5, 2.5, 1.25] 
         };
+        
+        // --- NEW: Default Routines ---
+        const defaultRoutines = [
+            {
+                id: 1001, name: 'Default: Full Body', activities: [
+                    { id: 1, type: 'strength', exercise: 'Squat', weight: '', reps: '5', unit: 'lbs' },
+                    { id: 2, type: 'strength', exercise: 'Squat', weight: '', reps: '5', unit: 'lbs' },
+                    { id: 3, type: 'strength', exercise: 'Squat', weight: '', reps: '5', unit: 'lbs' },
+                    { id: 4, type: 'strength', exercise: 'Bench Press', weight: '', reps: '5', unit: 'lbs' },
+                    { id: 5, type: 'strength', exercise: 'Bench Press', weight: '', reps: '5', unit: 'lbs' },
+                    { id: 6, type: 'strength', exercise: 'Bench Press', weight: '', reps: '5', unit: 'lbs' },
+                    { id: 7, type: 'strength', exercise: 'Barbell Row', weight: '', reps: '5', unit: 'lbs' },
+                    { id: 8, type: 'strength', exercise: 'Barbell Row', weight: '', reps: '5', unit: 'lbs' },
+                    { id: 9, type: 'strength', exercise: 'Barbell Row', weight: '', reps: '5', unit: 'lbs' },
+                    { id: 10, type: 'cardio', exercise: 'Running', duration: 10 }
+                ]
+            },
+            {
+                id: 1002, name: 'Default: Push Day', activities: [
+                    { id: 11, type: 'strength', exercise: 'Bench Press', weight: '', reps: '8', unit: 'lbs' },
+                    { id: 12, type: 'strength', exercise: 'Bench Press', weight: '', reps: '8', unit: 'lbs' },
+                    { id: 13, type: 'strength', exercise: 'Bench Press', weight: '', reps: '8', unit: 'lbs' },
+                    { id: 14, type: 'strength', exercise: 'Overhead Press', weight: '', reps: '10', unit: 'lbs' },
+                    { id: 15, type: 'strength', exercise: 'Overhead Press', weight: '', reps: '10', unit: 'lbs' },
+                    { id: 16, type: 'strength', exercise: 'Dips', weight: '', reps: '12', unit: 'lbs' },
+                    { id: 17, type: 'strength', exercise: 'Dips', weight: '', reps: '12', unit: 'lbs' }
+                ]
+            },
+            {
+                id: 1003, name: 'Default: Pull Day', activities: [
+                    { id: 18, type: 'strength', exercise: 'Deadlift', weight: '', reps: '5', unit: 'lbs' },
+                    { id: 19, type: 'strength', exercise: 'Pull-ups', weight: '', reps: '8', unit: 'lbs' },
+                    { id: 20, type: 'strength', exercise: 'Pull-ups', weight: '', reps: '8', unit: 'lbs' },
+                    { id: 21, type: 'strength', exercise: 'Barbell Row', weight: '', reps: '10', unit: 'lbs' },
+                    { id: 22, type: 'strength', exercise: 'Barbell Row', weight: '', reps: '10', unit: 'lbs' },
+                    { id: 23, type: 'strength', exercise: 'Bicep Curl', weight: '', reps: '12', unit: 'lbs' }
+                ]
+            },
+            {
+                id: 1004, name: 'Default: Leg Day', activities: [
+                    { id: 24, type: 'strength', exercise: 'Squat', weight: '', reps: '5', unit: 'lbs' },
+                    { id: 25, type: 'strength', exercise: 'Squat', weight: '', reps: '5', unit: 'lbs' },
+                    { id: 26, type: 'strength', exercise: 'Squat', weight: '', reps: '5', unit: 'lbs' },
+                    { id: 27, type: 'strength', exercise: 'Romanian Deadlift', weight: '', reps: '10', unit: 'lbs' },
+                    { id: 28, type: 'strength', exercise: 'Romanian Deadlift', weight: '', reps: '10', unit: 'lbs' },
+                    { id: 29, type: 'strength', exercise: 'Leg Press', weight: '', reps: '12', unit: 'lbs' },
+                    { id: 30, type: 'strength', exercise: 'Calf Raise', weight: '', reps: '15', unit: 'lbs' }
+                ]
+            },
+            {
+                id: 1005, name: 'Default: Cardio Blast', activities: [
+                    { id: 31, type: 'cardio', exercise: 'Running', duration: 15 },
+                    { id: 32, type: 'cardio', exercise: 'Cycling', duration: 15 },
+                    { id: 33, type: 'cardio', exercise: 'Rowing Machine', duration: 10 }
+                ]
+            }
+        ];
+
+        // --- NEW: Load default routines if none exist ---
+        (function loadDefaultRoutines() {
+            // Check if the first default routine already exists. If not, add all defaults.
+            if (!state.routines.some(r => r.id === 1001)) {
+                console.log('Loading default routines...');
+                // Prepend defaults to any user-created routines
+                state.routines = [...defaultRoutines, ...state.routines];
+                localStorage.setItem('routines', JSON.stringify(state.routines));
+            }
+        })();
 
         // Strength Standards Data
         const strengthStandards = {
@@ -470,8 +575,24 @@
             advanced: 'bg-orange-600',
             elite: 'bg-red-600'
         };
+        
+        // --- NEW: Calculator Handlers ---
+        function handleCalculateStrength() {
+            state.strengthResult = calculateStrength();
+            render();
+        }
+        
+        function handleCalculate1RM() {
+            state.oneRMResult = calculate1RM();
+            render();
+        }
 
-        // Calculate Plates
+        function handleCalculatePlates() {
+            state.plateResult = calculatePlates();
+            render();
+        }
+
+        // Calculate Plates (Uses state.weight)
         function calculatePlates() {
             const target = parseFloat(state.weight);
             if (!target || target <= 0) return null;
@@ -502,7 +623,7 @@
             return { plates: result };
         }
 
-        // Calculate 1RM
+        // Calculate 1RM (Uses state.repWeight, state.reps)
         function calculate1RM() {
             const weight = parseFloat(state.repWeight);
             const reps = parseInt(state.reps);
@@ -529,13 +650,14 @@
             return { avg: avg.toFixed(1), percentages };
         }
 
-        // Calculate Strength Level
+        // Calculate Strength Level (Uses state.strengthWeight, state.bodyweight)
         function calculateStrength() {
             const bodyweight = parseFloat(state.bodyweight);
-            const weight = parseFloat(state.weight);
+            const weight = parseFloat(state.strengthWeight); // UPDATED
             
             if (!bodyweight || !weight || bodyweight <= 0 || weight <= 0) return null;
             
+            // UPDATED: Use state.unit for conversions
             const weightLbs = state.unit === 'kg' ? weight * 2.20462 : weight;
             const bodyweightLbs = state.unit === 'kg' ? bodyweight * 2.20462 : bodyweight;
             const ratio = weightLbs / bodyweightLbs;
@@ -624,7 +746,83 @@
             render();
         }
 
-        // Finish Workout
+        // --- NEW: Confetti ---
+        function triggerConfetti() {
+            const container = document.getElementById('confetti-container');
+            if (!container) return;
+            const colors = ['#3b82f6', '#a855f7', '#ec4899', '#22c55e', '#facc15'];
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('span');
+                confetti.classList.add('confetti');
+                confetti.style.left = `${Math.random() * 100}vw`;
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = `${Math.random() * 0.5}s`;
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                
+                container.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }
+        }
+
+        // --- NEW: Helper function for auto-PR check ---
+        function isNewPR(exerciseName, weight, reps) {
+            const w = parseFloat(weight);
+            const r = parseInt(reps);
+            
+            if (!w || !r || w <= 0 || r <= 0) return false;
+            
+            const existingPRs = state.prs.filter(pr => pr.exercise === exerciseName && pr.unit === state.unit);
+            
+            if (existingPRs.length === 0) return true;
+
+            const maxWeightPR = Math.max(...existingPRs.map(pr => pr.weight));
+            
+            if (w > maxWeightPR) return true;
+            
+            if (w === maxWeightPR) {
+                const repsAtMaxWeight = Math.max(...existingPRs.filter(pr => pr.weight === maxWeightPR).map(pr => pr.reps));
+                if (r > repsAtMaxWeight) return true;
+            }
+            
+            return false;
+        }
+        
+        // --- NEW: Helper to show next PR from queue ---
+        function showNextPR() {
+            if (!state.pendingPRs || state.pendingPRs.length === 0) {
+                // All PRs shown, save the workout
+                savePendingWorkout();
+                return;
+            }
+            
+            const nextPR = state.pendingPRs.shift();
+            state.prData = { exercise: nextPR.exercise, weight: nextPR.weight, reps: nextPR.reps };
+            state.showPRDialog = true;
+            render();
+            triggerConfetti();
+        }
+        
+        // --- NEW: Helper to save workout after PRs are handled ---
+        function savePendingWorkout() {
+            if (!state.pendingWorkout) return;
+            
+            state.workouts = [...state.workouts, state.pendingWorkout];
+            localStorage.setItem('workouts', JSON.stringify(state.workouts));
+            
+            state.currentSets = [];
+            state.selectedCalendarDate = null;
+            state.pendingWorkout = null;
+            state.pendingPRs = [];
+            
+            alert('🎉 Workout saved!');
+            render(); // Render final clean state
+        }
+
+
+        // UPDATED: Finish Workout (with auto-PR check)
         function finishWorkout() {
             if (state.currentSets.length === 0) return;
 
@@ -638,53 +836,53 @@
                 activities: state.currentSets,
                 volume: state.currentSets
                     .filter(a => a.type === 'strength')
-                    .reduce((sum, set) => sum + (set.weight * set.reps), 0)
+                    .reduce((sum, set) => {
+                        const w = parseFloat(set.weight) || 0;
+                        const r = parseInt(set.reps) || 0;
+                        return sum + (w * r);
+                    }, 0)
             };
             
-            state.workouts = [...state.workouts, workout];
-            localStorage.setItem('workouts', JSON.stringify(state.workouts));
-            state.currentSets = [];
+            // --- Auto-PR Check ---
+            const newPRs = state.currentSets.filter(a => 
+                a.type === 'strength' && isNewPR(a.exercise, a.weight, a.reps)
+            );
             
-            state.selectedCalendarDate = null; 
-            
-            alert('🎉 Workout saved!');
-            render();
+            if (newPRs.length > 0) {
+                state.pendingWorkout = workout; // Store workout
+                state.pendingPRs = newPRs;     // Store PRs
+                showNextPR();                // Start the PR modal chain
+            } else {
+                // No new PRs, just save normally
+                state.workouts = [...state.workouts, workout];
+                localStorage.setItem('workouts', JSON.stringify(state.workouts));
+                state.currentSets = [];
+                state.selectedCalendarDate = null; 
+                alert('🎉 Workout saved!');
+                render();
+            }
         }
 
-        // Check PR
+        // Check PR (Manual Button)
         function checkPR(exerciseName, weight, reps) {
-            const existingPRs = state.prs.filter(pr => pr.exercise === exerciseName && pr.unit === state.unit);
-            
-            if (existingPRs.length === 0) {
+            if (isNewPR(exerciseName, weight, reps)) {
                 state.prData = { exercise: exerciseName, weight, reps };
                 state.showPRDialog = true;
                 render();
-                return;
+                triggerConfetti();
+            } else {
+                alert('Not a new PR (compared to your max weight/rep PR).');
             }
-
-            const maxWeightPR = Math.max(...existingPRs.map(pr => pr.weight));
-            
-            if (weight > maxWeightPR) {
-                state.prData = { exercise: exerciseName, weight, reps };
-                state.showPRDialog = true;
-                render();
-                return;
-            }
-            
-            if (weight === maxWeightPR) {
-                const repsAtMaxWeight = Math.max(...existingPRs.filter(pr => pr.weight === maxWeightPR).map(pr => pr.reps));
-                if (reps > repsAtMaxWeight) {
-                    state.prData = { exercise: exerciseName, weight, reps };
-                    state.showPRDialog = true;
-                    render();
-                    return;
-                }
-            }
-            
-            alert('Not a new PR (compared to your max weight/rep PR).');
         }
 
-        // Save PR
+        // --- NEW: Share PR function (from PR tab) ---
+        function sharePR(pr) {
+            const msg = `✨🏆 **PERSONAL RECORD!** 🏆✨\n\n${pr.userName || 'I'} hit this PR on ${new Date(pr.date).toLocaleDateString()}:\n\n**${pr.exercise}**\n🚀 **${pr.weight} ${pr.unit} × ${pr.reps} reps** 🚀\n\n💪 Crushed it! 💪\nTracked with Rocko's Modern Gym App!`;
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+
+        // UPDATED: Save PR (integrates with new auto-PR flow)
         function savePR(share) {
             if (!state.prData) return;
             
@@ -698,6 +896,7 @@
                 date: new Date().toISOString()
             };
             
+            // Remove old, lesser PRs
             state.prs = state.prs.filter(pr => 
                 pr.exercise !== newPR.exercise || 
                 pr.weight > newPR.weight ||
@@ -708,13 +907,19 @@
             localStorage.setItem('prs', JSON.stringify(state.prs));
             
             if (share) {
-                const msg = `🎉🏆 **NEW PERSONAL RECORD!** 🏆🎉\n\n${state.userName || 'I'} just crushed a new PR on **${state.prData.exercise}**!\n\n💪 **${state.prData.weight} ${state.unit}** × **${state.prData.reps}** rep(s)! 💪\n\nPowered by Rocko's Modern Gym App! ⚡`;
-                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(msg)}`, '_blank');
+                // Use the new sharePR function for consistent formatting
+                sharePR(newPR);
             }
             
             state.showPRDialog = false;
             state.prData = null;
-            render();
+            
+            // If this was an auto-PR, show the next one or save workout
+            if (state.pendingWorkout) {
+                showNextPR();
+            } else {
+                render(); // Just re-render if it was a manual check
+            }
         }
 
         // Delete PR
@@ -726,9 +931,8 @@
             }
         }
 
-        // Share Workout (FIXED)
+        // Share Workout (FIXED & Improved)
         function shareWorkout(workout) {
-            // Defensively get activities, supporting old 'sets' key
             const activities = workout.activities || workout.sets || [];
             
             const activitiesList = activities
@@ -746,7 +950,7 @@
                 volumeMsg = `\n\n---\n🔥 **Total Volume: ${workout.volume.toLocaleString()} ${state.unit}** 🔥`;
             }
 
-            const msg = `💪 **WORKOUT COMPLETE!** 💪\n\n${state.userName || 'I'} just finished a session:\n\n${activitiesList}${volumeMsg}\n\nTracked with Rocko's Modern Gym App! ⚡`;
+            const msg = `💪 **WORKOUT COMPLETE!** 💪\n\n${state.userName || 'I'} just finished a session on ${new Date(workout.date).toLocaleDateString()}:\n\n${activitiesList}${volumeMsg}\n\nTracked with Rocko's Modern Gym App! ⚡`;
             
             window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(msg)}`, '_blank');
         }
@@ -771,10 +975,10 @@
             return streak;
         }
 
-        // Share Streak
+        // Share Streak (Improved)
         function shareStreak() {
             const streak = getStreak();
-            const msg = `🔥 ${state.userName || 'I'} have a ${streak} day workout streak! Keep grinding! 💪`;
+            const msg = `🔥🔥 **${streak} DAY STREAK!** 🔥🔥\n\n${state.userName || 'I'} am on a ${streak} day workout streak!\n\nKeep grinding! 💪\nTracked with Rocko's Modern Gym App!`;
             window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(msg)}`, '_blank');
         }
 
@@ -798,11 +1002,9 @@
         function getProgressData(exerciseName) {
             const data = [];
             state.workouts.forEach(wo => {
-                // Defensively get activities, supporting old 'sets' key
                 const activities = wo.activities || wo.sets || [];
                 
                 activities.forEach(a => {
-                    // Check that weight and reps are valid numbers
                     if (a.type === 'strength' && 
                         a.exercise === exerciseName && 
                         a.weight !== null && a.weight !== undefined && 
@@ -957,8 +1159,8 @@
                         routine.activities.forEach(a => {
                             let newActivity = { ...a, id: Date.now() + Math.random() };
                             if (newActivity.type === 'strength') {
-                                newActivity.weight = '';
-                                newActivity.reps = '';
+                                newActivity.weight = a.weight || '';
+                                newActivity.reps = a.reps || '';
                             }
                             activitiesToLog.push(newActivity);
                         });
@@ -1062,8 +1264,8 @@
             const activitiesToLog = routine.activities.map(a => {
                 let newActivity = { ...a, id: Date.now() + Math.random() };
                 if (newActivity.type === 'strength') {
-                    newActivity.weight = '';
-                    newActivity.reps = '';
+                    newActivity.weight = a.weight || '';
+                    newActivity.reps = a.reps || '';
                 }
                 return newActivity;
             });
@@ -1166,32 +1368,57 @@
         // Main Render Function
         function render() {
             const app = document.getElementById('app');
-            const plateResult = calculatePlates();
-            const strengthResult = calculateStrength();
-            const oneRMResult = calculate1RM();
             const streak = getStreak();
 
+            // --- UPDATED: renderActivity for editable logs ---
             function renderActivity(a, idx, listName) {
-                if (a.type === 'strength') {
-                    return `
-                        <div class="flex items-center justify-between glass-strong rounded-lg p-3 mb-2">
-                            <div>
-                                <span class="font-semibold">${a.exercise}</span>
-                                <span class="text-gray-400 ml-2">${a.weight || '...'} ${a.unit} × ${a.reps || '...'}</span>
+                if (listName === 'currentSets') { // Editable version for Log tab
+                    if (a.type === 'strength') {
+                        return `
+                            <div class="glass-strong rounded-lg p-3 mb-2">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="font-semibold">${a.exercise}</span>
+                                    <button onclick="state.currentSets.splice(${idx}, 1); render();" class="text-red-400 hover:text-red-300 text-xl">×</button>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <input type="number" value="${a.weight}" oninput="state.currentSets[${idx}].weight = this.value" placeholder="Weight (${a.unit})" class="glass text-white rounded-lg px-3 py-2 text-sm">
+                                    <input type="number" value="${a.reps}" oninput="state.currentSets[${idx}].reps = this.value" placeholder="Reps" class="glass text-white rounded-lg px-3 py-2 text-sm">
+                                </div>
                             </div>
-                            <button onclick="state.${listName}.splice(${idx}, 1); render();" class="text-red-400 hover:text-red-300 text-xl">×</button>
-                        </div>
-                    `;
-                } else {
-                    return `
-                        <div class="flex items-center justify-between glass-strong rounded-lg p-3 mb-2">
-                            <div>
-                                <span class="font-semibold">${a.exercise}</span>
-                                <span class="text-gray-400 ml-2">${a.duration} min</span>
+                        `;
+                    } else { // Cardio
+                        return `
+                            <div class="glass-strong rounded-lg p-3 mb-2">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="font-semibold">${a.exercise}</span>
+                                    <button onclick="state.currentSets.splice(${idx}, 1); render();" class="text-red-400 hover:text-red-300 text-xl">×</button>
+                                </div>
+                                <input type="number" value="${a.duration}" oninput="state.currentSets[${idx}].duration = this.value" placeholder="Duration (min)" class="w-full glass text-white rounded-lg px-3 py-2 text-sm">
                             </div>
-                            <button onclick="state.${listName}.splice(${idx}, 1); render();" class="text-red-400 hover:text-red-300 text-xl">×</button>
-                        </div>
-                    `;
+                        `;
+                    }
+                } else { // Read-only version for Routines tab
+                    if (a.type === 'strength') {
+                        return `
+                            <div class="flex items-center justify-between glass-strong rounded-lg p-3 mb-2">
+                                <div>
+                                    <span class="font-semibold">${a.exercise}</span>
+                                    <span class="text-gray-400 ml-2">${a.weight || '...'} ${a.unit} × ${a.reps || '...'}</span>
+                                </div>
+                                <button onclick="state.${listName}.splice(${idx}, 1); render();" class="text-red-400 hover:text-red-300 text-xl">×</button>
+                            </div>
+                        `;
+                    } else {
+                        return `
+                            <div class="flex items-center justify-between glass-strong rounded-lg p-3 mb-2">
+                                <div>
+                                    <span class="font-semibold">${a.exercise}</span>
+                                    <span class="text-gray-400 ml-2">${a.duration} min</span>
+                                </div>
+                                <button onclick="state.${listName}.splice(${idx}, 1); render();" class="text-red-400 hover:text-red-300 text-xl">×</button>
+                            </div>
+                        `;
+                    }
                 }
             }
 
@@ -1251,6 +1478,11 @@
                     <div class="glass-strong rounded-3xl p-6 hover-lift fade-in mb-6">
                         <h3 class="text-xl font-bold mb-4">Strength Standards</h3>
                         
+                        <div class="flex gap-2 mb-4">
+                            <button onclick="state.unit = 'lbs'; render();" class="flex-1 py-3 rounded-lg font-semibold transition ${state.unit === 'lbs' ? 'bg-blue-600' : 'glass hover:glass-strong'}">LBS</button>
+                            <button onclick="state.unit = 'kg'; render();" class="flex-1 py-3 rounded-lg font-semibold transition ${state.unit === 'kg' ? 'bg-blue-600' : 'glass hover:glass-strong'}">KG</button>
+                        </div>
+                        
                         <div class="grid grid-cols-2 gap-4 mb-4">
                             <select onchange="state.exercise = this.value; render();" class="glass text-white rounded-lg px-4 py-3">
                                 ${['squat', 'bench', 'deadlift', 'ohp', 'row'].map(ex => 
@@ -1268,29 +1500,36 @@
                             <option value="enhanced" ${state.category === 'enhanced' ? 'selected' : ''}>Enhanced Lifter</option>
                         </select>
                         
-                        <input type="number" value="${state.bodyweight}" oninput="state.bodyweight = this.value;" onchange="render();" placeholder="Your bodyweight (${state.unit})" class="w-full glass text-white rounded-lg px-4 py-3 mb-4">
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <input type="number" value="${state.bodyweight}" oninput="state.bodyweight = this.value;" placeholder="Your bodyweight (${state.unit})" class="w-full glass text-white rounded-lg px-4 py-3">
+                            <input type="number" value="${state.strengthWeight}" oninput="state.strengthWeight = this.value;" placeholder="Weight Lifted (${state.unit})" class="w-full glass text-white rounded-lg px-4 py-3">
+                        </div>
                         
-                        ${strengthResult ? `
+                        <button onclick="handleCalculateStrength()" class="w-full btn-primary hover-scale transition-all ripple py-3 rounded-lg font-semibold transition mb-4">
+                            Calculate Strength
+                        </button>
+                        
+                        ${state.strengthResult ? `
                             <div class="glass rounded-xl p-6">
                                 <div class="text-center mb-4">
-                                    <div class="text-3xl font-bold ${levelColors[strengthResult.level]} capitalize mb-2">${strengthResult.level}</div>
-                                    <div class="text-gray-400 text-sm">${strengthResult.ratio}x Bodyweight</div>
+                                    <div class="text-3xl font-bold ${levelColors[state.strengthResult.level]} capitalize mb-2">${state.strengthResult.level}</div>
+                                    <div class="text-gray-400 text-sm">${state.strengthResult.ratio}x Bodyweight</div>
                                 </div>
                                 
-                                ${strengthResult.level !== 'elite' ? `
+                                ${state.strengthResult.level !== 'elite' ? `
                                     <div class="mb-4">
                                         <div class="flex justify-between text-xs text-gray-400 mb-2">
-                                            <span>Progress to ${strengthResult.nextLevel}</span>
-                                            <span>${strengthResult.progress}%</span>
+                                            <span>Progress to ${state.strengthResult.nextLevel}</span>
+                                            <span>${state.strengthResult.progress}%</span>
                                         </div>
                                         <div class="w-full glass rounded-full h-3">
-                                            <div class="h-3 rounded-full ${levelBgColors[strengthResult.level]} transition-all duration-500" style="width: ${strengthResult.progress}%"></div>
+                                            <div class="h-3 rounded-full ${levelBgColors[state.strengthResult.level]} transition-all duration-500" style="width: ${state.strengthResult.progress}%"></div>
                                         </div>
                                     </div>
-                                    ${strengthResult.nextWeight ? `
+                                    ${state.strengthResult.nextWeight ? `
                                         <div class="text-center text-sm">
                                             <span class="text-gray-400">Next milestone:</span>
-                                            <span class="text-white font-bold text-lg ml-2">${strengthResult.nextWeight} ${state.unit}</span>
+                                            <span class="text-white font-bold text-lg ml-2">${state.strengthResult.nextWeight} ${state.unit}</span>
                                         </div>
                                     ` : ''}
                                 ` : `
@@ -1303,16 +1542,25 @@
                     <div class="glass-strong rounded-3xl p-6 hover-lift fade-in mb-6">
                         <h3 class="text-xl font-bold mb-4">1RM Calculator</h3>
                         
-                        <div class="grid grid-cols-2 gap-4 mb-4">
-                            <input type="number" value="${state.repWeight}" oninput="state.repWeight = this.value;" onchange="render();" placeholder="Weight" class="glass text-white rounded-lg px-4 py-3">
-                            <input type="number" value="${state.reps}" oninput="state.reps = this.value;" onchange="render();" placeholder="Reps (1-12)" class="glass text-white rounded-lg px-4 py-3">
+                        <div class="flex gap-2 mb-4">
+                            <button onclick="state.unit = 'lbs'; render();" class="flex-1 py-3 rounded-lg font-semibold transition ${state.unit === 'lbs' ? 'bg-blue-600' : 'glass hover:glass-strong'}">LBS</button>
+                            <button onclick="state.unit = 'kg'; render();" class="flex-1 py-3 rounded-lg font-semibold transition ${state.unit === 'kg' ? 'bg-blue-600' : 'glass hover:glass-strong'}">KG</button>
                         </div>
                         
-                        ${oneRMResult ? `
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <input type="number" value="${state.repWeight}" oninput="state.repWeight = this.value;" placeholder="Weight (${state.unit})" class="glass text-white rounded-lg px-4 py-3">
+                            <input type="number" value="${state.reps}" oninput="state.reps = this.value;" placeholder="Reps (1-12)" class="glass text-white rounded-lg px-4 py-3">
+                        </div>
+                        
+                        <button onclick="handleCalculate1RM()" class="w-full btn-primary hover-scale transition-all ripple py-3 rounded-lg font-semibold transition mb-4">
+                            Calculate 1RM
+                        </button>
+                        
+                        ${state.oneRMResult ? `
                             <div class="glass rounded-xl p-6">
                                 <div class="text-center mb-6">
                                     <div class="text-sm text-gray-400 mb-2">Estimated 1 Rep Max</div>
-                                    <div class="text-5xl font-bold text-green-400">${oneRMResult.avg}</div>
+                                    <div class="text-5xl font-bold text-green-400">${state.oneRMResult.avg}</div>
                                     <div class="text-sm text-gray-400 mt-1">${state.unit}</div>
                                 </div>
                                 
@@ -1320,14 +1568,10 @@
                                     ${[95, 90, 85, 80, 75, 70, 65, 60].map(pct => `
                                         <div class="glass-strong rounded-lg px-4 py-3 flex justify-between items-center">
                                             <span class="text-gray-400 font-semibold">${pct}%</span>
-                                            <span class="text-white font-bold">${oneRMResult.percentages[pct]}</span>
+                                            <span class="text-white font-bold">${state.oneRMResult.percentages[pct]}</span>
                                         </div>
                                     `).join('')}
                                 </div>
-                                
-                                <button onclick="state.weight = '${oneRMResult.avg}'; render();" class="w-full mt-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 hover-scale transition-all ripple glow-green py-3 rounded-lg font-semibold transition">
-                                    Use ${oneRMResult.avg} ${state.unit} as Target Weight
-                                </button>
                             </div>
                         ` : `
                             <div class="text-center text-gray-400 py-6">
@@ -1350,16 +1594,20 @@
                             ).join('')}
                         </select>
                         
-                        <input type="number" value="${state.weight}" oninput="state.weight = this.value;" onchange="render();" placeholder="Enter target weight (${state.unit})" class="w-full glass text-white text-2xl rounded-lg px-4 py-3 mb-6">
+                        <input type="number" value="${state.weight}" oninput="state.weight = this.value;" placeholder="Enter target weight (${state.unit})" class="w-full glass text-white text-2xl rounded-lg px-4 py-3 mb-6">
                         
-                        ${plateResult && plateResult.plates ? `
+                        <button onclick="handleCalculatePlates()" class="w-full btn-primary hover-scale transition-all ripple py-3 rounded-lg font-semibold transition mb-4">
+                            Calculate Plates
+                        </button>
+                        
+                        ${state.plateResult && state.plateResult.plates ? `
                             <div class="glass rounded-xl p-6">
-                                ${plateResult.error ? `
-                                    <p class="text-yellow-400 text-sm mb-4 text-center font-semibold">${plateResult.error}</p>
+                                ${state.plateResult.error ? `
+                                    <p class="text-yellow-400 text-sm mb-4 text-center font-semibold">${state.plateResult.error}</p>
                                 ` : ''}
                                 <h4 class="text-xl font-bold mb-4 text-center">Load per side:</h4>
                                 <div class="space-y-3">
-                                    ${plateResult.plates.map(p => `
+                                    ${state.plateResult.plates.map(p => `
                                         <div class="flex items-center justify-between glass-strong rounded-xl p-4 hover-scale transition-all">
                                             <span class="text-2xl font-bold text-blue-400">${p.weight} ${state.unit}</span>
                                             <span class="text-xl text-gray-300">× ${p.count}</span>
@@ -1367,9 +1615,9 @@
                                     `).join('')}
                                 </div>
                             </div>
-                        ` : plateResult && plateResult.error ? `
+                        ` : state.plateResult && state.plateResult.error ? `
                             <div class="glass rounded-xl p-6 text-center">
-                                <p class="text-yellow-400">${plateResult.error}</p>
+                                <p class="text-yellow-400">${state.plateResult.error}</p>
                             </div>
                         ` : ''}
                     </div>
@@ -1444,8 +1692,6 @@
                                 <p class="text-gray-500 text-sm">Start tracking your progress above</p>
                             </div>
                         ` : state.workouts.slice().reverse().slice(0, 10).map(w => {
-                            // *** CRITICAL BUG FIX ***
-                            // Defensively get activities, supporting old 'sets' key
                             const activities = w.activities || w.sets || [];
                             
                             return `
@@ -1558,7 +1804,7 @@
                                             <div class="space-y-2">
                                                 ${r.activities.map(a => {
                                                     if (a.type === 'strength') {
-                                                        return `<div class="text-sm glass-strong rounded px-3 py-2">${a.exercise}: ${a.weight} ${a.unit} × ${a.reps}</div>`;
+                                                        return `<div class="text-sm glass-strong rounded px-3 py-2">${a.exercise}: ${a.weight || '...'} ${a.unit} × ${a.reps || '...'}</div>`;
                                                     } else {
                                                         return `<div class="text-sm glass-strong rounded px-3 py-2">${a.exercise}: ${a.duration} min</div>`;
                                                     }
@@ -1659,7 +1905,10 @@
                                                 </div>
                                                 <div class="text-xs text-gray-500">${new Date(pr.date).toLocaleDateString()}</div>
                                             </div>
-                                            <button onclick="deletePR(${pr.id})" class="text-red-400 text-xl hover:scale-110 transition">🗑️</button>
+                                            <div class="flex flex-col items-end gap-2">
+                                                <button onclick='sharePR(${JSON.stringify(pr).replace(/'/g, "\\'")})' class="text-blue-400 text-2xl hover:scale-110 transition">📤</button>
+                                                <button onclick="deletePR(${pr.id})" class="text-red-400 text-xl hover:scale-110 transition">🗑️</button>
+                                            </div>
                                         </div>
                                     </div>
                                 `).join('')}
@@ -1684,7 +1933,7 @@
                 ${state.showPRDialog && state.prData ? `
                     <div class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50">
                         <div class="glass-strong rounded-3xl p-6 hover-lift fade-in max-w-md w-full">
-                            <h3 class="text-2xl font-bold mb-4 text-center">🎉 New PR!</h3>
+                            <h3 class="text-2xl font-bold mb-4 text-center gradient-text">Grats! New PR!</h3>
                             <div class="text-center mb-4">
                                 <div class="text-lg font-bold text-green-400 mb-2">${state.prData.exercise}</div>
                                 <div class="text-4xl font-bold text-blue-400 mb-1">${state.prData.weight} ${state.unit}</div>
